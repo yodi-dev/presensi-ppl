@@ -17,6 +17,7 @@
                 <p class="text-muted mt-1">Selamat datang, <?= session()->get('nama') ?></p>
             </div>
             <div>
+                <a href="<?= base_url('guru/laporan') ?>" class="btn btn-primary me-2">📋 Laporan Bulanan</a>
                 <a href="<?= base_url('guru/ubahpassword') ?>" class="btn btn-outline-primary me-2">Ubah Password</a>
                 <a href="<?= base_url('auth/logout') ?>" class="btn btn-danger">Logout</a>
             </div>

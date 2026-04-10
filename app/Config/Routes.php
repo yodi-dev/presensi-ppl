@@ -25,3 +25,5 @@ $routes->post('/proses_ubah_password', 'Mahasiswa::prosesUbahPassword');
 
 $routes->get('guru/ubahpassword', 'Guru::ubahPassword');
 $routes->post('guru/prosesubahpassword', 'Guru::prosesUbahPassword');
+
+$routes->get('guru/laporan', 'Guru::laporan');
