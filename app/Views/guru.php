@@ -13,7 +13,7 @@
 
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h2 class="fw-bold mb-0">Dashboard Dosen / Guru 👨‍🏫</h2>
+                <h2 class="fw-bold mb-0">Dashboard Guru</h2>
                 <p class="text-muted mt-1">Selamat datang, <?= session()->get('nama') ?></p>
             </div>
             <div>
@@ -30,10 +30,23 @@
         <?php endif; ?>
 
         <div class="card shadow-sm border-0 mt-4">
-            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                <h5 class="mb-0 fw-bold">Rekap Presensi Hari Ini</h5>
-                <span class="badge bg-primary fs-6"><?= date('d F Y', strtotime($tanggal)) ?></span>
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center flex-wrap">
+                <h5 class="mb-0 fw-bold">Rekap Presensi</h5>
+
+                <form action="<?= base_url('guru') ?>" method="GET" class="d-flex align-items-center mt-2 mt-md-0">
+                    <label for="tanggal" class="me-2 fw-bold text-muted">Filter:</label>
+                    <input type="date" id="tanggal" name="tanggal" class="form-control form-control-sm me-2" value="<?= $tanggal ?>" required>
+                    <button type="submit" class="btn btn-sm btn-primary me-1">Cari</button>
+                    <a href="<?= base_url('guru') ?>" class="btn btn-sm btn-outline-secondary">Reset</a>
+                </form>
             </div>
+
+            <div class="card-body pb-0">
+                <p class="text-muted mb-2">
+                    Menampilkan data presensi untuk tanggal: <span class="fw-bold text-primary"><?= date('d F Y', strtotime($tanggal)) ?></span>
+                </p>
+            </div>
+
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered mb-0 text-center align-middle">

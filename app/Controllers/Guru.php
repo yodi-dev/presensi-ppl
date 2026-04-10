@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Models\PresensiModel;
 use App\Models\UserModel;
 
 class Guru extends BaseController
@@ -16,15 +15,18 @@ class Guru extends BaseController
 
         $db      = \Config\Database::connect();
         $builder = $db->table('users');
-        $tanggalHariIni = date('Y-m-d');
+
+        $tanggalFilter = $this->request->getGet('tanggal');
+
+        $tanggalPilih = $tanggalFilter ? $tanggalFilter : date('Y-m-d');
 
         // Mengambil semua user dengan role 'mahasiswa' dan di-JOIN dengan tabel presensi hari ini
         $builder->select('users.id, users.nama, presensi.status, presensi.jam_masuk, presensi.jam_keluar, presensi.keterangan, presensi.latitude, presensi.longitude');
-        $builder->join('presensi', "presensi.user_id = users.id AND presensi.tanggal = '$tanggalHariIni'", 'left');
+        $builder->join('presensi', "presensi.user_id = users.id AND presensi.tanggal = '$tanggalPilih'", 'left');
         $builder->where('users.role', 'mahasiswa');
 
         $data = [
-            'tanggal'  => $tanggalHariIni,
+            'tanggal'  => $tanggalPilih,
             'presensi' => $builder->get()->getResultArray()
         ];
 
