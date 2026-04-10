@@ -5,40 +5,160 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Presensi PPL</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .login-card {
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .login-header {
+            background-color: #003366;
+            /* Warna Navy */
+            color: white;
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+        }
+
+        .login-body {
+            padding: 2.5rem;
+            background-color: #ffffff;
+        }
+
+        .form-control {
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+        }
+
+        .form-control:focus {
+            background-color: #fff;
+            border-color: #003366;
+            box-shadow: 0 0 0 0.2rem rgba(0, 51, 102, 0.25);
+        }
+
+        .input-group-text {
+            border-radius: 0.5rem 0 0 0.5rem;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-right: none;
+            color: #6c757d;
+        }
+
+        .form-control.border-start-0 {
+            border-radius: 0 0.5rem 0.5rem 0;
+            border-left: none;
+        }
+
+        .btn-login {
+            background-color: #003366;
+            border-color: #003366;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login:hover {
+            background-color: #002244;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 51, 102, 0.3);
+        }
+    </style>
 </head>
 
-<body class="bg-light d-flex align-items-center" style="height: 100vh;">
+<body>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-4">
-                <div class="card shadow-sm border-0">
-                    <div class="card-body p-4">
-                        <h4 class="text-center mb-4 fw-bold text-primary">Presensi PPL</h4>
+            <div class="col-11 col-sm-8 col-md-6 col-lg-5 col-xl-4">
 
-                        <?php if (session()->getFlashdata('error')): ?>
-                            <div class="alert alert-danger p-2 text-center">
-                                <?= session()->getFlashdata('error') ?>
-                            </div>
-                        <?php endif; ?>
+                <div class="card login-card border-0">
+                    <div class="login-header">
+                        <i class="bi bi-geo-alt-fill fs-1 mb-2 d-block"></i>
+                        <h4 class="fw-bold mb-0">Presensi PPL</h4>
+                        <p class="text-white-50 mb-0 small mt-1">Sistem Absensi Digital</p>
+                    </div>
 
+                    <div class="login-body">
                         <form action="<?= base_url('auth/proses_login') ?>" method="POST">
                             <?= csrf_field() ?>
-                            <div class="mb-3">
-                                <label class="form-label">Username</label>
-                                <input type="text" name="username" class="form-control" placeholder="Masukkan username" required>
-                            </div>
+
                             <div class="mb-4">
-                                <label class="form-label">Password</label>
-                                <input type="password" name="password" class="form-control" placeholder="Masukkan password" required>
+                                <label class="form-label text-muted fw-semibold small">Username</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                    <input type="text" name="username" class="form-control border-start-0" placeholder="Masukkan username" required autofocus>
+                                </div>
                             </div>
-                            <button type="submit" class="btn btn-primary w-100 fw-bold">Masuk</button>
+
+                            <div class="mb-4">
+                                <label class="form-label text-muted fw-semibold small">Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                    <input type="password" name="password" class="form-control border-start-0" placeholder="Masukkan password" required>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-login btn-primary w-100 text-white mt-2">
+                                MASUK <i class="bi bi-box-arrow-in-right ms-1"></i>
+                            </button>
                         </form>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
+
+    <?php if (session()->getFlashdata('error')): ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal Login!',
+                    text: '<?= session()->getFlashdata('error') ?>',
+                    confirmButtonColor: '#003366',
+                    confirmButtonText: 'Coba Lagi'
+                });
+            });
+        </script>
+    <?php endif; ?>
+
+    <?php if (session()->getFlashdata('pesan')): ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: '<?= session()->getFlashdata('pesan') ?>',
+                    confirmButtonColor: '#003366',
+                    timer: 2500,
+                    showConfirmButton: false
+                });
+            });
+        </script>
+    <?php endif; ?>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

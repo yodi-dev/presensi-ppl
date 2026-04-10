@@ -12,7 +12,7 @@
     <div class="container mt-5">
 
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="fw-bold">Halo, <?= session()->get('nama') ?>! 👋</h2>
+            <h2 class="fw-bold">Halo, <?= session()->get('nama') ?>!</h2>
             <div>
                 <a href="<?= base_url('ubah_password') ?>" class="btn btn-success">Ubah Password</a>
                 <a href="<?= base_url('auth/logout') ?>" class="btn btn-danger">Logout</a>
