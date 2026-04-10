@@ -8,8 +8,7 @@ class Auth extends BaseController
 {
     public function index()
     {
-        // Menampilkan halaman login
-        return view('login');
+        return view('auth/login');
     }
 
     public function proses_login()

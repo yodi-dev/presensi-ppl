@@ -120,3 +120,45 @@ WARNING - 2026-04-10 14:11:52 --> [DEPRECATED] Setting lowercase HTTP method key
 INFO - 2026-04-10 14:11:52 --> CSRF token verified.
 DEBUG - 2026-04-10 14:11:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
 DEBUG - 2026-04-10 14:11:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-04-10 14:17:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-04-10 14:20:40 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "auth.login"
+[Method: GET, Route: auth]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(228): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('auth.login')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth.login', [], true)
+ 3 APPPATH\Controllers\Auth.php(11): view('auth.login')
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth->index()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+10 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragon\\www\\presensi-ppl\\public\\index.php')
+DEBUG - 2026-04-10 14:20:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+WARNING - 2026-04-10 14:23:54 --> [DEPRECATED] Setting lowercase HTTP method key "post" is deprecated. Use uppercase HTTP method like "POST". in SYSTEMPATH\Filters\Filters.php on line 744.
+ 1 SYSTEMPATH\Filters\Filters.php(744): trigger_error('Setting lowercase HTTP method key "post" is deprecated. Use uppercase HTTP method like "POST".', 16384)
+ 2 SYSTEMPATH\Filters\Filters.php(475): CodeIgniter\Filters\Filters->processMethods()
+ 3 SYSTEMPATH\Filters\Filters.php(218): CodeIgniter\Filters\Filters->initialize('auth/proses_login')
+ 4 SYSTEMPATH\CodeIgniter.php(465): CodeIgniter\Filters\Filters->run('auth/proses_login', 'before')
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 9 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragon\\www\\presensi-ppl\\public\\index.php')
+INFO - 2026-04-10 14:23:54 --> CSRF token verified.
+DEBUG - 2026-04-10 14:23:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-04-10 14:23:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-04-10 14:24:09 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+WARNING - 2026-04-10 14:24:22 --> [DEPRECATED] Setting lowercase HTTP method key "post" is deprecated. Use uppercase HTTP method like "POST". in SYSTEMPATH\Filters\Filters.php on line 744.
+ 1 SYSTEMPATH\Filters\Filters.php(744): trigger_error('Setting lowercase HTTP method key "post" is deprecated. Use uppercase HTTP method like "POST".', 16384)
+ 2 SYSTEMPATH\Filters\Filters.php(475): CodeIgniter\Filters\Filters->processMethods()
+ 3 SYSTEMPATH\Filters\Filters.php(218): CodeIgniter\Filters\Filters->initialize('mahasiswa/pulang')
+ 4 SYSTEMPATH\CodeIgniter.php(465): CodeIgniter\Filters\Filters->run('mahasiswa/pulang', 'before')
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 9 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragon\\www\\presensi-ppl\\public\\index.php')
+INFO - 2026-04-10 14:24:22 --> CSRF token verified.
+DEBUG - 2026-04-10 14:24:22 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-04-10 14:24:22 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
