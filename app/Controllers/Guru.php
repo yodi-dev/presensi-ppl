@@ -30,7 +30,7 @@ class Guru extends BaseController
             'presensi' => $builder->get()->getResultArray()
         ];
 
-        return view('guru', $data); // atau 'guru/index' tergantung struktur foldermu
+        return view('guru/index', $data); // atau 'guru/index' tergantung struktur foldermu
     }
 
     public function laporan()

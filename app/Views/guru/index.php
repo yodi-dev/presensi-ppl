@@ -1,0 +1,154 @@
+<?= $this->extend('layout/template') ?>
+
+<?= $this->section('styles') ?>
+<style>
+    .dashboard-card {
+        border-radius: 1rem;
+        border: none;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+    }
+
+    .card-header-custom {
+        background-color: #ffffff;
+        border-bottom: 2px solid #f8f9fa;
+        padding: 1.5rem;
+    }
+
+    .table-custom {
+        margin-bottom: 0;
+    }
+
+    .table-custom thead th {
+        background-color: #003366;
+        color: #ffffff;
+        font-weight: 500;
+        border-bottom: none;
+        padding: 1rem;
+        white-space: nowrap;
+    }
+
+    .table-custom tbody td {
+        padding: 1rem;
+        vertical-align: middle;
+    }
+
+    .btn-action-top {
+        border-radius: 0.5rem;
+        font-weight: 500;
+    }
+
+    .filter-wrapper {
+        background-color: #f8f9fa;
+        border-radius: 0.5rem;
+        padding: 0.5rem 1rem;
+    }
+</style>
+<?= $this->endSection() ?>
+
+<?= $this->section('content') ?>
+<div class="container mt-4 mb-5">
+
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+        <div>
+            <h3 class="fw-bold text-dark mb-0"><i class="bi bi-person-workspace text-primary me-2"></i>Dashboard Guru</h3>
+            <p class="text-muted mt-1 mb-0">Selamat datang, <strong><?= session()->get('nama') ?></strong></p>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+            <a href="<?= base_url('guru/laporan') ?>" class="btn btn-primary btn-action-top text-white">
+                <i class="bi bi-file-earmark-spreadsheet me-1"></i> Laporan Bulanan
+            </a>
+            <a href="<?= base_url('guru/ubahpassword') ?>" class="btn btn-outline-secondary btn-action-top">
+                <i class="bi bi-key me-1"></i> Ubah Password
+            </a>
+            <a href="<?= base_url('auth/logout') ?>" class="btn btn-danger btn-action-top">
+                <i class="bi bi-box-arrow-right me-1"></i> Logout
+            </a>
+        </div>
+    </div>
+
+    <div class="card dashboard-card mt-4">
+
+        <div class="card-header-custom d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
+            <div>
+                <h5 class="mb-1 fw-bold text-dark">Rekap Presensi Harian</h5>
+                <p class="text-muted small mb-0">
+                    Menampilkan data untuk tanggal: <span class="fw-bold text-primary"><?= date('d F Y', strtotime($tanggal)) ?></span>
+                </p>
+            </div>
+
+            <form action="<?= base_url('guru') ?>" method="GET" class="filter-wrapper d-flex align-items-center flex-wrap gap-2">
+                <label for="tanggal" class="fw-bold text-muted small mb-0"><i class="bi bi-calendar-event me-1"></i>Filter:</label>
+                <input type="date" id="tanggal" name="tanggal" class="form-control form-control-sm border-0 shadow-sm" style="width: auto;" value="<?= $tanggal ?>" required>
+                <button type="submit" class="btn btn-sm btn-primary shadow-sm"><i class="bi bi-search"></i> Cari</button>
+                <a href="<?= base_url('guru') ?>" class="btn btn-sm btn-light border shadow-sm" title="Reset ke hari ini"><i class="bi bi-arrow-clockwise"></i></a>
+            </form>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-custom text-center">
+                <thead>
+                    <tr>
+                        <th width="5%">No</th>
+                        <th width="22%" class="text-start">Nama Mahasiswa</th>
+                        <th width="10%">Status</th>
+                        <th width="12%">Jam Masuk</th>
+                        <th width="12%">Jam Pulang</th>
+                        <th width="25%" class="text-start">Keterangan</th>
+                        <th width="14%">Lokasi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (empty($presensi)): ?>
+                        <tr>
+                            <td colspan="7" class="text-center py-5 text-muted">
+                                <i class="bi bi-inbox fs-1 d-block mb-2 text-black-50"></i>
+                                Belum ada data presensi mahasiswa pada tanggal ini.
+                            </td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach ($presensi as $key => $row): ?>
+                            <tr>
+                                <td><span class="text-muted fw-semibold"><?= $key + 1 ?></span></td>
+                                <td class="text-start fw-bold text-dark"><?= $row['nama'] ?></td>
+
+                                <td>
+                                    <?php if ($row['status'] == 'hadir'): ?>
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">Hadir</span>
+                                    <?php elseif ($row['status'] == 'izin'): ?>
+                                        <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle px-2 py-1">Izin</span>
+                                    <?php elseif ($row['status'] == 'sakit'): ?>
+                                        <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-2 py-1">Sakit</span>
+                                    <?php else: ?>
+                                        <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2 py-1">Belum Absen</span>
+                                    <?php endif; ?>
+                                </td>
+
+                                <td><span class="fw-semibold <?= $row['jam_masuk'] ? 'text-success' : 'text-muted' ?>"><?= $row['jam_masuk'] ? $row['jam_masuk'] : '--:--' ?></span></td>
+                                <td><span class="fw-semibold <?= $row['jam_keluar'] ? 'text-warning' : 'text-muted' ?>"><?= $row['jam_keluar'] ? $row['jam_keluar'] : '--:--' ?></span></td>
+
+                                <td class="text-start text-muted small">
+                                    <?= $row['keterangan'] ? $row['keterangan'] : '<span class="text-black-50 fst-italic">Tidak ada keterangan</span>' ?>
+                                </td>
+
+                                <td>
+                                    <?php if ($row['status'] == 'hadir' && $row['latitude'] && $row['longitude']): ?>
+                                        <a href="https://www.google.com/maps?q=<?= $row['latitude'] ?>,<?= $row['longitude'] ?>"
+                                            target="_blank"
+                                            class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                            <i class="bi bi-geo-alt-fill"></i> Cek Map
+                                        </a>
+                                    <?php else: ?>
+                                        <span class="text-muted">-</span>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+<?= $this->endSection() ?>

@@ -25,7 +25,7 @@ class Mahasiswa extends BaseController
             'presensi_hari_ini' => $presensiHariIni
         ];
 
-        return view('mahasiswa/mahasiswa', $data);
+        return view('mahasiswa/index', $data);
     }
 
     public function datang()
