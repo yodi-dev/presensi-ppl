@@ -31,41 +31,64 @@ class Guru extends BaseController
         return view('guru/index', $data); // atau 'guru/index' tergantung struktur foldermu
     }
 
-    public function laporan()
+    public function update_status($userId, $status)
     {
-        if (session()->get('role') != 'guru') {
-            return redirect()->to('/auth');
-        }
+        $tanggal = $this->request->getGet('tgl');
+        $presensiModel = new \App\Models\PresensiModel(); // Pastikan model ini ada
 
-        $db = \Config\Database::connect();
-
-        // Tangkap request filter, kalau kosong pakai bulan dan tahun saat ini
-        $bulanFilter = $this->request->getGet('bulan') ?: date('m');
-        $tahunFilter = $this->request->getGet('tahun') ?: date('Y');
-
-        $builder = $db->table('users');
-
-        // Trik Query: Hitung total masing-masing status langsung dari database
-        $builder->select("
-            users.id, 
-            users.nama,
-            SUM(CASE WHEN presensi.status = 'hadir' THEN 1 ELSE 0 END) as total_hadir,
-            SUM(CASE WHEN presensi.status = 'izin' THEN 1 ELSE 0 END) as total_izin,
-            SUM(CASE WHEN presensi.status = 'sakit' THEN 1 ELSE 0 END) as total_sakit
-        ");
-
-        // JOIN dengan kondisi filter Bulan dan Tahun
-        $builder->join('presensi', "presensi.user_id = users.id AND MONTH(presensi.tanggal) = '$bulanFilter' AND YEAR(presensi.tanggal) = '$tahunFilter'", 'left');
-
-        $builder->where('users.role', 'mahasiswa');
-        $builder->groupBy('users.id, users.nama'); // Kelompokkan berdasarkan mahasiswa
+        // Cek apakah sudah ada datanya di tanggal tersebut
+        $existing = $presensiModel->where(['user_id' => $userId, 'tanggal' => $tanggal])->first();
 
         $data = [
-            'bulan_pilih' => $bulanFilter,
-            'tahun_pilih' => $tahunFilter,
-            'laporan'     => $builder->get()->getResultArray()
+            'user_id' => $userId,
+            'tanggal' => $tanggal,
+            'status'  => $status,
+            'keterangan' => 'Diupdate manual oleh Guru'
         ];
 
-        return view('laporan', $data); // Arahkan ke file view baru
+        if ($existing) {
+            $presensiModel->update($existing['id'], $data);
+        } else {
+            $presensiModel->insert($data);
+        }
+
+        return redirect()->back()->with('pesan', 'Status berhasil diupdate!');
+    }
+
+    public function laporan()
+    {
+        // 1. Ambil request bulan dan tahun dari form filter (atau set default bulan/tahun sekarang)
+        $bulan = $this->request->getGet('bulan') ?? date('m');
+        $tahun = $this->request->getGet('tahun') ?? date('Y');
+
+        $db      = \Config\Database::connect();
+        $builder = $db->table('users');
+
+        // 2. Query super power untuk menghitung total masing-status per mahasiswa
+        $laporan = $builder->select("
+                users.id, 
+                users.nama,
+                SUM(CASE WHEN presensi.status = 'hadir' THEN 1 ELSE 0 END) as total_hadir,
+                SUM(CASE WHEN presensi.status = 'izin' THEN 1 ELSE 0 END) as total_izin,
+                SUM(CASE WHEN presensi.status = 'sakit' THEN 1 ELSE 0 END) as total_sakit,
+                SUM(CASE WHEN presensi.status = 'alpa' THEN 1 ELSE 0 END) as total_alpa
+            ")
+            // Join ke tabel presensi berdasarkan ID user dan filter bulan/tahun
+            ->join('presensi', "presensi.user_id = users.id AND MONTH(presensi.tanggal) = '$bulan' AND YEAR(presensi.tanggal) = '$tahun'", 'left')
+            // Pastikan cuma nampilin user yang role-nya mahasiswa
+            ->where('users.role', 'mahasiswa')
+            // Group by ID mahasiswa biar datanya ter-rekap per orang
+            ->groupBy('users.id')
+            ->get()
+            ->getResultArray();
+
+        // 3. Kirim data ke view
+        $data = [
+            'laporan'     => $laporan,
+            'bulan_pilih' => $bulan,
+            'tahun_pilih' => $tahun
+        ];
+
+        return view('guru/laporan', $data);
     }
 }

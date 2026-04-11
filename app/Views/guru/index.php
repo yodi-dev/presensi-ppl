@@ -95,7 +95,7 @@
                         <th width="12%">Jam Masuk</th>
                         <th width="12%">Jam Pulang</th>
                         <th width="25%" class="text-start">Keterangan</th>
-                        <th width="14%">Lokasi</th>
+                        <th width="14%">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -119,6 +119,8 @@
                                         <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle px-2 py-1">Izin</span>
                                     <?php elseif ($row['status'] == 'sakit'): ?>
                                         <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-2 py-1">Sakit</span>
+                                    <?php elseif ($row['status'] == 'alpa'): ?>
+                                        <span class="badge bg-danger-subtle text-danger-emphasis border border-danger-subtle px-2 py-1">Alpa</span>
                                     <?php else: ?>
                                         <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2 py-1">Belum Absen</span>
                                     <?php endif; ?>
@@ -132,15 +134,23 @@
                                 </td>
 
                                 <td>
-                                    <?php if ($row['status'] == 'hadir' && $row['latitude'] && $row['longitude']): ?>
-                                        <a href="https://www.google.com/maps?q=<?= $row['latitude'] ?>,<?= $row['longitude'] ?>"
-                                            target="_blank"
-                                            class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                                            <i class="bi bi-geo-alt-fill"></i> Cek Map
+                                    <?php if ($row['status'] == 'hadir' && $row['latitude']): ?>
+                                        <a href="https://www.google.com/maps?q=<?= $row['latitude'] ?>,<?= $row['longitude'] ?>" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill mb-1">
+                                            <i class="bi bi-geo-alt"></i> Map
                                         </a>
-                                    <?php else: ?>
-                                        <span class="text-muted">-</span>
                                     <?php endif; ?>
+
+                                    <div class="dropdown d-inline">
+                                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown">
+                                            <i class="bi bi-pencil-square"></i> Status
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="<?= base_url('guru/update_status/' . $row['id'] . '/hadir?tgl=' . $tanggal) ?>">Set Hadir</a></li>
+                                            <li><a class="dropdown-item" href="<?= base_url('guru/update_status/' . $row['id'] . '/izin?tgl=' . $tanggal) ?>">Set Izin</a></li>
+                                            <li><a class="dropdown-item" href="<?= base_url('guru/update_status/' . $row['id'] . '/sakit?tgl=' . $tanggal) ?>">Set Sakit</a></li>
+                                            <li><a class="dropdown-item text-danger" href="<?= base_url('guru/update_status/' . $row['id'] . '/alpa?tgl=' . $tanggal) ?>">Set Alpa</a></li>
+                                        </ul>
+                                    </div>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

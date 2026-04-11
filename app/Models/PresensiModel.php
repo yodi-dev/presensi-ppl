@@ -24,6 +24,10 @@ class PresensiModel extends Model
         'keterangan'     // TAMBAHKAN INI
     ];
 
+    protected $validationRules = [
+        'status' => 'required|in_list[hadir,izin,sakit,alpa]'
+    ];
+
     public function getPresensiLengkap()
     {
         return $this->select('presensi.*, users.nama')

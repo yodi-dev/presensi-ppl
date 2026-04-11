@@ -15,6 +15,7 @@ $routes->get('/auth/logout', 'Auth::logout');
 
 $routes->get('/guru', 'Guru::index');
 $routes->get('guru/laporan', 'Guru::laporan');
+$routes->get('/guru/update_status/(:num)/(:segment)', 'Guru::update_status/$1/$2');
 
 $routes->get('/mahasiswa', 'Mahasiswa::index');
 $routes->post('/mahasiswa/datang', 'Mahasiswa::datang');
