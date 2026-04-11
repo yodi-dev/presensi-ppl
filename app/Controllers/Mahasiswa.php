@@ -25,7 +25,7 @@ class Mahasiswa extends BaseController
             'presensi_hari_ini' => $presensiHariIni
         ];
 
-        return view('mahasiswa', $data);
+        return view('mahasiswa/mahasiswa', $data);
     }
 
     public function datang()
@@ -84,7 +84,7 @@ class Mahasiswa extends BaseController
             return redirect()->to('/auth');
         }
 
-        return view('ubah_password');
+        return view('mahasiswa/ubah_password');
     }
 
     // Fungsi untuk memproses perubahan password
