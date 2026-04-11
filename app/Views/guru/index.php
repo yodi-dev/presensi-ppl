@@ -58,7 +58,7 @@
             <a href="<?= base_url('guru/laporan') ?>" class="btn btn-primary btn-action-top text-white">
                 <i class="bi bi-file-earmark-spreadsheet me-1"></i> Laporan Bulanan
             </a>
-            <a href="<?= base_url('guru/ubahpassword') ?>" class="btn btn-outline-secondary btn-action-top">
+            <a href="<?= base_url('ubah_password') ?>" class="btn btn-outline-secondary btn-action-top">
                 <i class="bi bi-key me-1"></i> Ubah Password
             </a>
             <a href="<?= base_url('auth/logout') ?>" class="btn btn-danger btn-action-top">

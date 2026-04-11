@@ -52,6 +52,54 @@ class Auth extends BaseController
         }
     }
 
+    // --- METHOD UNTUK MENAMPILKAN VIEW ---
+    public function ubahPasswordView()
+    {
+        // Pastikan user sudah login (cek session)
+        if (!session()->get('nama')) {
+            return redirect()->to('/')->with('error', 'Silakan login terlebih dahulu.');
+        }
+
+        return view('auth/ubah_password');
+    }
+
+    // --- METHOD UNTUK MEMPROSES UBAH PASSWORD ---
+    public function prosesUbahPassword()
+    {
+        $passwordLama = $this->request->getPost('password_lama');
+        $passwordBaru = $this->request->getPost('password_baru');
+        $konfirmasiPassword = $this->request->getPost('konfirmasi_password');
+
+        // 1. Validasi konfirmasi password
+        if ($passwordBaru !== $konfirmasiPassword) {
+            return redirect()->back()->with('error', 'Konfirmasi password tidak cocok dengan password baru!');
+        }
+
+        // 2. Ambil data session
+        $idUser = session()->get('id_user');
+        $role   = session()->get('role'); // Masih butuh buat redirect nanti
+
+        // 3. Panggil UserModel (Sekarang cukup panggil satu model ini aja)
+        $userModel = new UserModel();
+
+        // 4. Cari data user di database berdasarkan ID session
+        $user = $userModel->find($idUser);
+
+        // 5. Cek apakah password lama sesuai
+        if (!password_verify($passwordLama, $user['password'])) {
+            return redirect()->back()->with('error', 'Password lama yang kamu masukkan salah!');
+        }
+
+        // 6. Enkripsi password baru dan Update ke database
+        $userModel->update($idUser, [
+            'password' => password_hash($passwordBaru, PASSWORD_DEFAULT)
+        ]);
+
+        // 7. Arahkan kembali ke dashboard yang sesuai berdasarkan role
+        $redirectUrl = ($role === 'guru') ? '/guru' : '/mahasiswa';
+        return redirect()->to($redirectUrl)->with('pesan', 'Mantap! Password berhasil diubah.');
+    }
+
     public function logout()
     {
         // Hancurkan session saat logout

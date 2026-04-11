@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\Models\PresensiModel;
-use App\Models\UserModel;
 
 class Mahasiswa extends BaseController
 {
@@ -75,51 +74,6 @@ class Mahasiswa extends BaseController
         }
 
         return redirect()->to('/mahasiswa');
-    }
-
-    // Fungsi untuk menampilkan form ubah password
-    public function ubah_password()
-    {
-        if (session()->get('role') != 'mahasiswa') {
-            return redirect()->to('/auth');
-        }
-
-        return view('mahasiswa/ubah_password');
-    }
-
-    // Fungsi untuk memproses perubahan password
-    public function prosesUbahPassword()
-    {
-        // Panggil model tempat nyimpen data user (sesuaikan dengan nama modelmu ya)
-        $userModel = new UserModel();
-        $userId = session()->get('id_user');
-
-        $passLama = $this->request->getPost('password_lama');
-        $passBaru = $this->request->getPost('password_baru');
-        $passKonfirm = $this->request->getPost('konfirmasi_password');
-
-        // 1. Ambil data user dari database
-        $user = $userModel->find($userId);
-
-        // 2. Cek apakah password lama yang diinput cocok dengan di database
-        if (!password_verify($passLama, $user['password'])) {
-            session()->setFlashdata('error', 'Password lama salah!');
-            return redirect()->to('/mahasiswa/ubahpassword'); // Sesuaikan routingmu
-        }
-
-        // 3. Cek apakah password baru dan konfirmasi cocok
-        if ($passBaru !== $passKonfirm) {
-            session()->setFlashdata('error', 'Password baru dan konfirmasi tidak cocok!');
-            return redirect()->to('/mahasiswa/ubahpassword');
-        }
-
-        // 4. Jika aman, update password baru (jangan lupa di-hash!)
-        $userModel->update($userId, [
-            'password' => password_hash($passBaru, PASSWORD_DEFAULT)
-        ]);
-
-        session()->setFlashdata('pesan', 'Password berhasil diubah! Silakan ingat password baru kamu.');
-        return redirect()->to('/mahasiswa'); // Balikin ke dashboard
     }
 
     public function izin_sakit()
