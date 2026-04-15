@@ -14,21 +14,36 @@ class Guru extends BaseController
         $db      = \Config\Database::connect();
         $builder = $db->table('users');
 
+        // Ambil input filter dari URL
         $tanggalFilter = $this->request->getGet('tanggal');
+        $jurusan       = $this->request->getGet('jurusan');
 
+        // Default tanggal hari ini jika tidak ada filter
         $tanggalPilih = $tanggalFilter ? $tanggalFilter : date('Y-m-d');
 
-        // Mengambil semua user dengan role 'mahasiswa' dan di-JOIN dengan tabel presensi hari ini
-        $builder->select('users.id, users.nama, presensi.status, presensi.jam_masuk, presensi.jam_keluar, presensi.keterangan, presensi.latitude, presensi.longitude');
+        // 1. Pilih kolom (tambahkan users.jurusan agar bisa kita tampilkan di tabel)
+        $builder->select('users.id, users.nama, users.jurusan, presensi.status, presensi.jam_masuk, presensi.jam_keluar, presensi.keterangan, presensi.latitude, presensi.longitude');
+
+        // 2. JOIN dengan tabel presensi berdasarkan tanggal yang dipilih
         $builder->join('presensi', "presensi.user_id = users.id AND presensi.tanggal = '$tanggalPilih'", 'left');
+
+        // 3. Filter dasar: Hanya role mahasiswa
         $builder->where('users.role', 'mahasiswa');
 
+        // --- 🛠️ PENYESUAIAN DISINI SOB ---
+        // 4. Filter tambahan: Jika jurusan dipilih, saring datanya
+        if (!empty($jurusan)) {
+            $builder->where('users.jurusan', $jurusan);
+        }
+        // ---------------------------------
+
         $data = [
-            'tanggal'  => $tanggalPilih,
-            'presensi' => $builder->get()->getResultArray()
+            'tanggal'          => $tanggalPilih,
+            'presensi'         => $builder->get()->getResultArray(), // Data yang sudah difilter
+            'jurusan_terpilih' => $jurusan
         ];
 
-        return view('guru/index', $data); // atau 'guru/index' tergantung struktur foldermu
+        return view('guru/index', $data);
     }
 
     public function update_status($userId, $status)
@@ -82,11 +97,12 @@ class Guru extends BaseController
             ->get()
             ->getResultArray();
 
+
         // 3. Kirim data ke view
         $data = [
             'laporan'     => $laporan,
             'bulan_pilih' => $bulan,
-            'tahun_pilih' => $tahun
+            'tahun_pilih' => $tahun,
         ];
 
         return view('guru/laporan', $data);

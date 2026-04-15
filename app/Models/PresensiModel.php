@@ -36,4 +36,20 @@ class PresensiModel extends Model
             ->orderBy('presensi.jam_masuk', 'DESC')
             ->findAll();
     }
+
+    // Tambahkan fungsi ini di PresensiModel kamu
+    public function getLaporanWithFilter($jurusan = null)
+    {
+        $builder = $this->select('presensi.*, users.nama, users.jurusan')
+            ->join('users', 'users.id = presensi.user_id');
+
+        // Kalau ada filter jurusan yang dipilih, tambahkan 'WHERE'
+        if (!empty($jurusan)) {
+            $builder->where('users.jurusan', $jurusan);
+        }
+
+        // Urutkan dari yang terbaru
+        return $builder->orderBy('presensi.tanggal', 'DESC')
+            ->findAll();
+    }
 }
