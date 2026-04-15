@@ -92,7 +92,7 @@
                 </p>
             </div>
 
-            <div class="d-flex gap-2">
+            <div class="d-flex flex-column flex-md-row gap-2">
                 <form action="" method="get" class="filter-wrapper d-flex align-items-center flex-wrap gap-2">
                     <div class="row g-2 align-items-center">
                         <div class="col-auto">
