@@ -102,4 +102,70 @@ class Mahasiswa extends BaseController
 
         return redirect()->to('/mahasiswa');
     }
+
+    public function piket()
+    {
+        $piketModel = new \App\Models\PiketModel();
+        $userId = session()->get('id_user');
+        $today = date('Y-m-d');
+
+        // Cari data piket user ini untuk hari ini
+        $sudahPiket = $piketModel->where('user_id', $userId)
+            ->where('tanggal', $today)
+            ->first();
+
+        $data = [
+            'title'      => 'Presensi Piket KBM',
+            'sudahPiket' => !empty($sudahPiket), // Akan bernilai true jika data ada
+            'dataPiket'  => $sudahPiket
+        ];
+
+        return view('mahasiswa/piket', $data);
+    }
+
+    public function simpanPiket()
+    {
+        // 1. Ambil data Base64 dari form
+        $base64_string = $this->request->getPost('foto_base64');
+
+        if (empty($base64_string)) {
+            return redirect()->back()->with('error', 'Foto bukti tidak boleh kosong!');
+        }
+
+        // 2. Pisahkan header "data:image/jpeg;base64," dari data inti fotonya
+        $image_parts = explode(";base64,", $base64_string);
+        $image_type_aux = explode("image/", $image_parts[0]);
+        $image_type = $image_type_aux[1] ?? 'jpeg'; // Default ke jpeg
+        $image_base64 = base64_decode($image_parts[1]);
+
+        // 3. Buat nama file unik (Format: piket_idUser_timestamp.jpeg)
+        $userId = session()->get('id_user'); // Pastikan ini sesuai dengan nama session id user kamu
+        $fileName = 'piket_' . $userId . '_' . time() . '.' . $image_type;
+
+        // 4. Tentukan lokasi folder penyimpanan (public/uploads/piket/)
+        $path = FCPATH . 'uploads/piket/';
+
+        // Bikin foldernya otomatis kalau belum ada
+        if (!is_dir($path)) {
+            mkdir($path, 0777, true);
+        }
+
+        // 5. Simpan file gambar ke dalam folder tersebut
+        file_put_contents($path . $fileName, $image_base64);
+
+        // 6. Simpan data presensi ke Database
+        $piketModel = new \App\Models\PiketModel();
+
+        $dataPiket = [
+            'user_id'    => $userId,
+            'tanggal'    => date('Y-m-d'),
+            'waktu'      => date('H:i:s'),
+            'foto_bukti' => $fileName // Kita cuma simpan nama filenya aja, bukan full gambarnya
+        ];
+
+        $piketModel->insert($dataPiket);
+
+        // 7. Redirect kembali dengan pesan sukses
+        return redirect()->to('mahasiswa/piket')->with('success', 'Presensi Piket KBM berhasil disimpan!');
+    }
 }

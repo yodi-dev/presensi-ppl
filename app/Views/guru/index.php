@@ -55,7 +55,7 @@
             <p class="text-muted mt-1 mb-0">Selamat datang, <strong><?= session()->get('nama') ?></strong></p>
         </div>
         <div class="d-flex flex-wrap gap-2">
-            <a href="<?= base_url('guru/laporan') ?>" class="btn btn-primary btn-action-top text-white">
+            <a href="<?= base_url('guru/laporan') ?>" class="btn btn-outline-primary btn-action-top">
                 <i class="bi bi-file-earmark-spreadsheet me-1"></i> Laporan Bulanan
             </a>
             <a href="<?= base_url('ubah_password') ?>" class="btn btn-outline-secondary btn-action-top">

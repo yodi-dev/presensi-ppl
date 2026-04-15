@@ -21,3 +21,5 @@ $routes->get('/mahasiswa', 'Mahasiswa::index');
 $routes->post('/mahasiswa/datang', 'Mahasiswa::datang');
 $routes->post('/mahasiswa/pulang', 'Mahasiswa::pulang');
 $routes->post('/mahasiswa/izin_sakit', 'Mahasiswa::izin_sakit');
+$routes->get('/mahasiswa/piket', 'Mahasiswa::piket');
+$routes->post('/mahasiswa/simpan-piket', 'Mahasiswa::simpanPiket');
