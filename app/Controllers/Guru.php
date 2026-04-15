@@ -91,4 +91,18 @@ class Guru extends BaseController
 
         return view('guru/laporan', $data);
     }
+
+    public function laporanPiket()
+    {
+        $piketModel = new \App\Models\PiketModel();
+
+        $data = [
+            'title' => 'Laporan Presensi Piket KBM',
+            // Ingat fungsi sakti getPiketWithUser() yang kita bikin di Step 1? 
+            // Sekarang saatnya dia bekerja nge-JOIN tabel piket dan users!
+            'dataPiket' => $piketModel->getPiketWithUser()
+        ];
+
+        return view('guru/laporan_piket', $data);
+    }
 }

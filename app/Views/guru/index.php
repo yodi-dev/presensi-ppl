@@ -55,9 +55,24 @@
             <p class="text-muted mt-1 mb-0">Selamat datang, <strong><?= session()->get('nama') ?></strong></p>
         </div>
         <div class="d-flex flex-wrap gap-2">
-            <a href="<?= base_url('guru/laporan') ?>" class="btn btn-outline-primary btn-action-top">
-                <i class="bi bi-file-earmark-spreadsheet me-1"></i> Laporan Bulanan
-            </a>
+            <div class="dropdown d-inline-block">
+                <button class="btn btn-outline-primary btn-action-top dropdown-toggle" type="button" id="dropdownMenuLaporan" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-file-earmark-spreadsheet me-1"></i> Laporan
+                </button>
+
+                <ul class="dropdown-menu shadow border-0 mt-2" aria-labelledby="dropdownMenuLaporan">
+                    <li>
+                        <a class="dropdown-item py-2" href="<?= base_url('guru/laporan_piket') ?>">
+                            <i class="bi bi-camera text-primary me-2"></i> Laporan Piket
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item py-2" href="<?= base_url('guru/laporan') ?>">
+                            <i class="bi bi-calendar-check text-success me-2"></i> Laporan Bulanan
+                        </a>
+                    </li>
+                </ul>
+            </div>
             <a href="<?= base_url('ubah_password') ?>" class="btn btn-outline-secondary btn-action-top">
                 <i class="bi bi-key me-1"></i> Ubah Password
             </a>

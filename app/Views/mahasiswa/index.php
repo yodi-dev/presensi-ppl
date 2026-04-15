@@ -62,7 +62,7 @@
         <h3 class="fw-bold text-dark mb-0"><i class="bi bi-person-circle text-primary me-2"></i>Halo, <?= session()->get('nama') ?>!</h3>
         <div class="d-flex gap-2">
             <a href="<?= base_url('mahasiswa/piket') ?>" class="btn btn-outline-primary btn-sm rounded-pill px-3">
-                Piket
+                <i class="bi bi-list-check"></i> Piket
             </a>
             <a href="<?= base_url('ubah_password') ?>" class="btn btn-outline-secondary btn-sm rounded-pill px-3">
                 <i class="bi bi-key"></i> Password
