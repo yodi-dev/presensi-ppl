@@ -112,11 +112,12 @@ class Guru extends BaseController
     {
         $piketModel = new \App\Models\PiketModel();
 
+        $tanggalFilter = $this->request->getGet('tanggal');
+        $tanggalPilih = $tanggalFilter ? $tanggalFilter : date('Y-m-d');
+
         $data = [
-            'title' => 'Laporan Presensi Piket KBM',
-            // Ingat fungsi sakti getPiketWithUser() yang kita bikin di Step 1? 
-            // Sekarang saatnya dia bekerja nge-JOIN tabel piket dan users!
-            'dataPiket' => $piketModel->getPiketWithUser()
+            'tanggal' => $tanggalPilih,
+            'dataPiket' => $piketModel->getPiketWithFilter($tanggalPilih)
         ];
 
         return view('guru/laporan_piket', $data);

@@ -1205,3 +1205,251 @@ DEBUG - 2026-04-15 21:46:31 --> Session: Class initialized using 'CodeIgniter\Se
 DEBUG - 2026-04-15 21:46:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
 DEBUG - 2026-04-15 21:47:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
 DEBUG - 2026-04-15 21:47:10 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-04-15 21:48:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-04-15 22:13:12 --> Not unique table/alias: 'piket_kbm'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('SELECT `users`.`id`, `users`.`nama`, `users`.`jurusan`, `piket_kbm`.`tanggal`, `piket_kbm`.`waktu`, `piket_kbm`.`foto_bukti`
+FROM `piket_kbm`
+LEFT JOIN `piket_kbm` ON `piket_kbm`.`user_id` = `users`.`id` AND `piket_kbm`.`tanggal` = \'2026-04-15\'
+WHERE `users`.`role` = \'mahasiswa\'
+ORDER BY `presensi`.`tanggal` DESC', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `users`.`id`, `users`.`nama`, `users`.`jurusan`, `piket_kbm`.`tanggal`, `piket_kbm`.`waktu`, `piket_kbm`.`foto_bukti`
+FROM `piket_kbm`
+LEFT JOIN `piket_kbm` ON `piket_kbm`.`user_id` = `users`.`id` AND `piket_kbm`.`tanggal` = \'2026-04-15\'
+WHERE `users`.`role` = \'mahasiswa\'
+ORDER BY `presensi`.`tanggal` DESC')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `users`.`id`, `users`.`nama`, `users`.`jurusan`, `piket_kbm`.`tanggal`, `piket_kbm`.`waktu`, `piket_kbm`.`foto_bukti`
+FROM `piket_kbm`
+LEFT JOIN `piket_kbm` ON `piket_kbm`.`user_id` = `users`.`id` AND `piket_kbm`.`tanggal` = \'2026-04-15\'
+WHERE `users`.`role` = \'mahasiswa\'
+ORDER BY `presensi`.`tanggal` DESC')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `users`.`id`, `users`.`nama`, `users`.`jurusan`, `piket_kbm`.`tanggal`, `piket_kbm`.`waktu`, `piket_kbm`.`foto_bukti`
+FROM `piket_kbm`
+LEFT JOIN `piket_kbm` ON `piket_kbm`.`user_id` = `users`.`id` AND `piket_kbm`.`tanggal` = \'2026-04-15\'
+WHERE `users`.`role` = :users.role:
+ORDER BY `presensi`.`tanggal` DESC', [...], false)
+ 5 SYSTEMPATH\Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+ 6 SYSTEMPATH\BaseModel.php(676): CodeIgniter\Model->doFindAll(0, 0)
+ 7 APPPATH\Models\PiketModel.php(43): CodeIgniter\BaseModel->findAll()
+ 8 APPPATH\Controllers\Guru.php(122): App\Models\PiketModel->getPiketWithFilter('2026-04-15')
+ 9 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Guru->laporanPiket()
+10 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Guru))
+11 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+15 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragon\\www\\presensi-ppl\\public\\index.php')
+CRITICAL - 2026-04-15 22:13:12 --> CodeIgniter\Database\Exceptions\DatabaseException: Not unique table/alias: 'piket_kbm'
+[Method: GET, Route: guru/laporan_piket]
+in SYSTEMPATH\Database\BaseConnection.php on line 865.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `users`.`id`, `users`.`nama`, `users`.`jurusan`, `piket_kbm`.`tanggal`, `piket_kbm`.`waktu`, `piket_kbm`.`foto_bukti`
+FROM `piket_kbm`
+LEFT JOIN `piket_kbm` ON `piket_kbm`.`user_id` = `users`.`id` AND `piket_kbm`.`tanggal` = \'2026-04-15\'
+WHERE `users`.`role` = :users.role:
+ORDER BY `presensi`.`tanggal` DESC', [...], false)
+ 2 SYSTEMPATH\Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+ 3 SYSTEMPATH\BaseModel.php(676): CodeIgniter\Model->doFindAll(0, 0)
+ 4 APPPATH\Models\PiketModel.php(43): CodeIgniter\BaseModel->findAll()
+ 5 APPPATH\Controllers\Guru.php(122): App\Models\PiketModel->getPiketWithFilter('2026-04-15')
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Guru->laporanPiket()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Guru))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragon\\www\\presensi-ppl\\public\\index.php')
+CRITICAL - 2026-04-15 22:13:12 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Not unique table/alias: 'piket_kbm'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 310.
+ 1 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `users`.`id`, `users`.`nama`, `users`.`jurusan`, `piket_kbm`.`tanggal`, `piket_kbm`.`waktu`, `piket_kbm`.`foto_bukti`
+FROM `piket_kbm`
+LEFT JOIN `piket_kbm` ON `piket_kbm`.`user_id` = `users`.`id` AND `piket_kbm`.`tanggal` = \'2026-04-15\'
+WHERE `users`.`role` = \'mahasiswa\'
+ORDER BY `presensi`.`tanggal` DESC')
+ 2 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `users`.`id`, `users`.`nama`, `users`.`jurusan`, `piket_kbm`.`tanggal`, `piket_kbm`.`waktu`, `piket_kbm`.`foto_bukti`
+FROM `piket_kbm`
+LEFT JOIN `piket_kbm` ON `piket_kbm`.`user_id` = `users`.`id` AND `piket_kbm`.`tanggal` = \'2026-04-15\'
+WHERE `users`.`role` = \'mahasiswa\'
+ORDER BY `presensi`.`tanggal` DESC')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `users`.`id`, `users`.`nama`, `users`.`jurusan`, `piket_kbm`.`tanggal`, `piket_kbm`.`waktu`, `piket_kbm`.`foto_bukti`
+FROM `piket_kbm`
+LEFT JOIN `piket_kbm` ON `piket_kbm`.`user_id` = `users`.`id` AND `piket_kbm`.`tanggal` = \'2026-04-15\'
+WHERE `users`.`role` = :users.role:
+ORDER BY `presensi`.`tanggal` DESC', [...], false)
+ 4 SYSTEMPATH\Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+ 5 SYSTEMPATH\BaseModel.php(676): CodeIgniter\Model->doFindAll(0, 0)
+ 6 APPPATH\Models\PiketModel.php(43): CodeIgniter\BaseModel->findAll()
+ 7 APPPATH\Controllers\Guru.php(122): App\Models\PiketModel->getPiketWithFilter('2026-04-15')
+ 8 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Guru->laporanPiket()
+ 9 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Guru))
+10 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+14 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragon\\www\\presensi-ppl\\public\\index.php')
+CRITICAL - 2026-04-15 22:13:12 --> [Caused by] mysqli_sql_exception: Not unique table/alias: 'piket_kbm'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('SELECT `users`.`id`, `users`.`nama`, `users`.`jurusan`, `piket_kbm`.`tanggal`, `piket_kbm`.`waktu`, `piket_kbm`.`foto_bukti`
+FROM `piket_kbm`
+LEFT JOIN `piket_kbm` ON `piket_kbm`.`user_id` = `users`.`id` AND `piket_kbm`.`tanggal` = \'2026-04-15\'
+WHERE `users`.`role` = \'mahasiswa\'
+ORDER BY `presensi`.`tanggal` DESC', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `users`.`id`, `users`.`nama`, `users`.`jurusan`, `piket_kbm`.`tanggal`, `piket_kbm`.`waktu`, `piket_kbm`.`foto_bukti`
+FROM `piket_kbm`
+LEFT JOIN `piket_kbm` ON `piket_kbm`.`user_id` = `users`.`id` AND `piket_kbm`.`tanggal` = \'2026-04-15\'
+WHERE `users`.`role` = \'mahasiswa\'
+ORDER BY `presensi`.`tanggal` DESC')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `users`.`id`, `users`.`nama`, `users`.`jurusan`, `piket_kbm`.`tanggal`, `piket_kbm`.`waktu`, `piket_kbm`.`foto_bukti`
+FROM `piket_kbm`
+LEFT JOIN `piket_kbm` ON `piket_kbm`.`user_id` = `users`.`id` AND `piket_kbm`.`tanggal` = \'2026-04-15\'
+WHERE `users`.`role` = \'mahasiswa\'
+ORDER BY `presensi`.`tanggal` DESC')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `users`.`id`, `users`.`nama`, `users`.`jurusan`, `piket_kbm`.`tanggal`, `piket_kbm`.`waktu`, `piket_kbm`.`foto_bukti`
+FROM `piket_kbm`
+LEFT JOIN `piket_kbm` ON `piket_kbm`.`user_id` = `users`.`id` AND `piket_kbm`.`tanggal` = \'2026-04-15\'
+WHERE `users`.`role` = :users.role:
+ORDER BY `presensi`.`tanggal` DESC', [...], false)
+ 5 SYSTEMPATH\Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+ 6 SYSTEMPATH\BaseModel.php(676): CodeIgniter\Model->doFindAll(0, 0)
+ 7 APPPATH\Models\PiketModel.php(43): CodeIgniter\BaseModel->findAll()
+ 8 APPPATH\Controllers\Guru.php(122): App\Models\PiketModel->getPiketWithFilter('2026-04-15')
+ 9 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Guru->laporanPiket()
+10 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Guru))
+11 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+15 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragon\\www\\presensi-ppl\\public\\index.php')
+ERROR - 2026-04-15 22:17:09 --> Unknown column 'presensi.tanggal' in 'order clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('SELECT `piket_kbm`.*, `users`.`id`, `users`.`nama`, `users`.`jurusan`
+FROM `piket_kbm`
+LEFT JOIN `users` ON `users`.`id` = `piket_kbm`.`user_id` AND `piket_kbm`.`tanggal` = \'2026-04-15\'
+WHERE `users`.`role` = \'mahasiswa\'
+ORDER BY `presensi`.`tanggal` DESC', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `piket_kbm`.*, `users`.`id`, `users`.`nama`, `users`.`jurusan`
+FROM `piket_kbm`
+LEFT JOIN `users` ON `users`.`id` = `piket_kbm`.`user_id` AND `piket_kbm`.`tanggal` = \'2026-04-15\'
+WHERE `users`.`role` = \'mahasiswa\'
+ORDER BY `presensi`.`tanggal` DESC')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `piket_kbm`.*, `users`.`id`, `users`.`nama`, `users`.`jurusan`
+FROM `piket_kbm`
+LEFT JOIN `users` ON `users`.`id` = `piket_kbm`.`user_id` AND `piket_kbm`.`tanggal` = \'2026-04-15\'
+WHERE `users`.`role` = \'mahasiswa\'
+ORDER BY `presensi`.`tanggal` DESC')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `piket_kbm`.*, `users`.`id`, `users`.`nama`, `users`.`jurusan`
+FROM `piket_kbm`
+LEFT JOIN `users` ON `users`.`id` = `piket_kbm`.`user_id` AND `piket_kbm`.`tanggal` = \'2026-04-15\'
+WHERE `users`.`role` = :users.role:
+ORDER BY `presensi`.`tanggal` DESC', [...], false)
+ 5 SYSTEMPATH\Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+ 6 SYSTEMPATH\BaseModel.php(676): CodeIgniter\Model->doFindAll(0, 0)
+ 7 APPPATH\Models\PiketModel.php(43): CodeIgniter\BaseModel->findAll()
+ 8 APPPATH\Controllers\Guru.php(122): App\Models\PiketModel->getPiketWithFilter('2026-04-15')
+ 9 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Guru->laporanPiket()
+10 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Guru))
+11 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+15 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragon\\www\\presensi-ppl\\public\\index.php')
+CRITICAL - 2026-04-15 22:17:09 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'presensi.tanggal' in 'order clause'
+[Method: GET, Route: guru/laporan_piket]
+in SYSTEMPATH\Database\BaseConnection.php on line 865.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `piket_kbm`.*, `users`.`id`, `users`.`nama`, `users`.`jurusan`
+FROM `piket_kbm`
+LEFT JOIN `users` ON `users`.`id` = `piket_kbm`.`user_id` AND `piket_kbm`.`tanggal` = \'2026-04-15\'
+WHERE `users`.`role` = :users.role:
+ORDER BY `presensi`.`tanggal` DESC', [...], false)
+ 2 SYSTEMPATH\Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+ 3 SYSTEMPATH\BaseModel.php(676): CodeIgniter\Model->doFindAll(0, 0)
+ 4 APPPATH\Models\PiketModel.php(43): CodeIgniter\BaseModel->findAll()
+ 5 APPPATH\Controllers\Guru.php(122): App\Models\PiketModel->getPiketWithFilter('2026-04-15')
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Guru->laporanPiket()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Guru))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragon\\www\\presensi-ppl\\public\\index.php')
+CRITICAL - 2026-04-15 22:17:09 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'presensi.tanggal' in 'order clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 310.
+ 1 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `piket_kbm`.*, `users`.`id`, `users`.`nama`, `users`.`jurusan`
+FROM `piket_kbm`
+LEFT JOIN `users` ON `users`.`id` = `piket_kbm`.`user_id` AND `piket_kbm`.`tanggal` = \'2026-04-15\'
+WHERE `users`.`role` = \'mahasiswa\'
+ORDER BY `presensi`.`tanggal` DESC')
+ 2 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `piket_kbm`.*, `users`.`id`, `users`.`nama`, `users`.`jurusan`
+FROM `piket_kbm`
+LEFT JOIN `users` ON `users`.`id` = `piket_kbm`.`user_id` AND `piket_kbm`.`tanggal` = \'2026-04-15\'
+WHERE `users`.`role` = \'mahasiswa\'
+ORDER BY `presensi`.`tanggal` DESC')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `piket_kbm`.*, `users`.`id`, `users`.`nama`, `users`.`jurusan`
+FROM `piket_kbm`
+LEFT JOIN `users` ON `users`.`id` = `piket_kbm`.`user_id` AND `piket_kbm`.`tanggal` = \'2026-04-15\'
+WHERE `users`.`role` = :users.role:
+ORDER BY `presensi`.`tanggal` DESC', [...], false)
+ 4 SYSTEMPATH\Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+ 5 SYSTEMPATH\BaseModel.php(676): CodeIgniter\Model->doFindAll(0, 0)
+ 6 APPPATH\Models\PiketModel.php(43): CodeIgniter\BaseModel->findAll()
+ 7 APPPATH\Controllers\Guru.php(122): App\Models\PiketModel->getPiketWithFilter('2026-04-15')
+ 8 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Guru->laporanPiket()
+ 9 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Guru))
+10 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+14 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragon\\www\\presensi-ppl\\public\\index.php')
+CRITICAL - 2026-04-15 22:17:09 --> [Caused by] mysqli_sql_exception: Unknown column 'presensi.tanggal' in 'order clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('SELECT `piket_kbm`.*, `users`.`id`, `users`.`nama`, `users`.`jurusan`
+FROM `piket_kbm`
+LEFT JOIN `users` ON `users`.`id` = `piket_kbm`.`user_id` AND `piket_kbm`.`tanggal` = \'2026-04-15\'
+WHERE `users`.`role` = \'mahasiswa\'
+ORDER BY `presensi`.`tanggal` DESC', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `piket_kbm`.*, `users`.`id`, `users`.`nama`, `users`.`jurusan`
+FROM `piket_kbm`
+LEFT JOIN `users` ON `users`.`id` = `piket_kbm`.`user_id` AND `piket_kbm`.`tanggal` = \'2026-04-15\'
+WHERE `users`.`role` = \'mahasiswa\'
+ORDER BY `presensi`.`tanggal` DESC')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `piket_kbm`.*, `users`.`id`, `users`.`nama`, `users`.`jurusan`
+FROM `piket_kbm`
+LEFT JOIN `users` ON `users`.`id` = `piket_kbm`.`user_id` AND `piket_kbm`.`tanggal` = \'2026-04-15\'
+WHERE `users`.`role` = \'mahasiswa\'
+ORDER BY `presensi`.`tanggal` DESC')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `piket_kbm`.*, `users`.`id`, `users`.`nama`, `users`.`jurusan`
+FROM `piket_kbm`
+LEFT JOIN `users` ON `users`.`id` = `piket_kbm`.`user_id` AND `piket_kbm`.`tanggal` = \'2026-04-15\'
+WHERE `users`.`role` = :users.role:
+ORDER BY `presensi`.`tanggal` DESC', [...], false)
+ 5 SYSTEMPATH\Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+ 6 SYSTEMPATH\BaseModel.php(676): CodeIgniter\Model->doFindAll(0, 0)
+ 7 APPPATH\Models\PiketModel.php(43): CodeIgniter\BaseModel->findAll()
+ 8 APPPATH\Controllers\Guru.php(122): App\Models\PiketModel->getPiketWithFilter('2026-04-15')
+ 9 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Guru->laporanPiket()
+10 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Guru))
+11 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+15 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragon\\www\\presensi-ppl\\public\\index.php')
+DEBUG - 2026-04-15 22:17:37 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-04-15 22:18:59 --> ErrorException: Undefined variable $tanggal
+[Method: GET, Route: guru/laporan_piket]
+in APPPATH\Views\guru\laporan_piket.php on line 75.
+ 1 APPPATH\Views\guru\laporan_piket.php(75): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $tanggal', 'C:\\laragon\\www\\presensi-ppl\\app\\Views\\guru\\laporan_piket.php', 75)
+ 2 SYSTEMPATH\View\View.php(240): include('C:\\laragon\\www\\presensi-ppl\\app\\Views\\guru\\laporan_piket.php')
+ 3 SYSTEMPATH\View\View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('guru/laporan_piket', [], true)
+ 5 APPPATH\Controllers\Guru.php(125): view('guru/laporan_piket', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Guru->laporanPiket()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Guru))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragon\\www\\presensi-ppl\\public\\index.php')
+DEBUG - 2026-04-15 22:20:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-04-15 22:20:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-04-15 22:21:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-04-15 22:22:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-04-15 22:22:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.

@@ -66,8 +66,15 @@
     </div>
 
     <div class="card shadow-sm border-0 rounded-4">
-        <div class="card-header bg-white pt-4 pb-2 border-0">
+        <div class="card-header-custom d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
             <h5 class="fw-bold"><i class="bi bi-journal-text me-2"></i> Laporan Piket KBM</h5>
+
+            <form action="<?= base_url('guru/laporan_piket') ?>" method="GET" class="filter-wrapper d-flex align-items-center flex-wrap gap-2">
+                <label for="tanggal" class="fw-bold text-muted small mb-0"><i class="bi bi-calendar-event me-1"></i>Filter:</label>
+                <input type="date" id="tanggal" name="tanggal" class="form-control form-control-sm border-0 shadow-sm" style="width: auto;" value="<?= $tanggal ?>" required>
+                <button type="submit" class="btn btn-sm btn-primary shadow-sm"><i class="bi bi-search"></i> Cari</button>
+                <a href="<?= base_url('guru') ?>" class="btn btn-sm btn-light border shadow-sm" title="Reset ke hari ini"><i class="bi bi-arrow-clockwise"></i></a>
+            </form>
         </div>
         <div class="card-body">
 

@@ -28,4 +28,17 @@ class PiketModel extends Model
             ->orderBy('piket_kbm.waktu', 'DESC')
             ->findAll();
     }
+
+    public function getPiketWithFilter($tanggal)
+    {
+        $builder = $this->select('piket_kbm.*, users.id, users.nama, users.jurusan');
+
+        // 2. JOIN dengan tabel presensi berdasarkan tanggal yang dipilih
+        $builder->join('users', "users.id = piket_kbm.user_id AND piket_kbm.tanggal = '$tanggal'", 'left');
+
+        // 3. Filter dasar: Hanya role mahasiswa
+        $builder->where('users.role', 'mahasiswa');
+
+        return $builder->findAll();
+    }
 }
