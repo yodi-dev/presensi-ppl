@@ -13,5 +13,5 @@ class UserModel extends Model
     protected $primaryKey = 'id';
 
     // Kolom yang boleh diisi/diambil
-    protected $allowedFields = ['username', 'nama', 'password', 'role'];
+    protected $allowedFields = ['username', 'nama', 'jurusan', 'password', 'role'];
 }

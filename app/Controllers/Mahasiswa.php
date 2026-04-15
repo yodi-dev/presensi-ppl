@@ -40,6 +40,7 @@ class Mahasiswa extends BaseController
                 'user_id'   => $userId,
                 'tanggal'   => $tanggalHariIni,
                 'jam_masuk' => date('H:i:s'),
+                'status' => 'hadir',
                 // Data ini sekarang pasti masuk karena view-nya udah bener
                 'latitude'  => $this->request->getPost('latitude'),
                 'longitude' => $this->request->getPost('longitude')
