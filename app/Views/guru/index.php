@@ -93,29 +93,28 @@
             </div>
 
             <div class="d-flex flex-column flex-md-row gap-2">
-                <form action="" method="get" class="filter-wrapper d-flex align-items-center flex-wrap gap-2">
-                    <div class="row g-2 align-items-center">
-                        <div class="col-auto">
-                            <label for="jurusan" class="fw-bold text-muted small mb-0"><i class="bi bi-funnel"></i> Filter Jurusan:</label>
-                        </div>
-                        <div class="col-auto">
-                            <select name="jurusan" id="jurusan" class="form-select form-select-sm border-0 shadow-sm" onchange="this.form.submit()">
-                                <option value="">-- Semua Jurusan --</option>
-                                <option value="Informatika" <?= ($jurusan_terpilih == 'Informatika') ? 'selected' : '' ?>>Informatika</option>
-                                <option value="PJOK" <?= ($jurusan_terpilih == 'PJOK') ? 'selected' : '' ?>>PJOK</option>
-                                <option value="BK" <?= ($jurusan_terpilih == 'BK') ? 'selected' : '' ?>>BK</option>
-                                <option value="TL" <?= ($jurusan_terpilih == 'TL') ? 'selected' : '' ?>>TL</option>
-                                <option value="TO" <?= ($jurusan_terpilih == 'TO') ? 'selected' : '' ?>>TO</option>
-                            </select>
-                        </div>
-                    </div>
-                </form>
+                <form action="<?= base_url('guru') ?>" method="GET" class="d-flex flex-column flex-md-row gap-3 align-items-md-center">
 
-                <form action="<?= base_url('guru') ?>" method="GET" class="filter-wrapper d-flex align-items-center flex-wrap gap-2">
-                    <label for="tanggal" class="fw-bold text-muted small mb-0"><i class="bi bi-calendar-event me-1"></i>Filter:</label>
-                    <input type="date" id="tanggal" name="tanggal" class="form-control form-control-sm border-0 shadow-sm" style="width: auto;" value="<?= $tanggal ?>" required>
-                    <button type="submit" class="btn btn-sm btn-primary shadow-sm"><i class="bi bi-search"></i> Cari</button>
-                    <a href="<?= base_url('guru') ?>" class="btn btn-sm btn-light border shadow-sm" title="Reset ke hari ini"><i class="bi bi-arrow-clockwise"></i></a>
+                    <div class="filter-wrapper d-flex align-items-center gap-2">
+                        <label for="jurusan" class="fw-bold text-muted small mb-0 text-nowrap"><i class="bi bi-funnel"></i> Jurusan:</label>
+                        <select name="jurusan" id="jurusan" class="form-select form-select-sm border-0 shadow-sm" onchange="this.form.submit()">
+                            <option value="">-- Semua Jurusan --</option>
+                            <option value="Informatika" <?= ($jurusan_terpilih == 'Informatika') ? 'selected' : '' ?>>Informatika</option>
+                            <option value="PJOK" <?= ($jurusan_terpilih == 'PJOK') ? 'selected' : '' ?>>PJOK</option>
+                            <option value="BK" <?= ($jurusan_terpilih == 'BK') ? 'selected' : '' ?>>BK</option>
+                            <option value="TL" <?= ($jurusan_terpilih == 'TL') ? 'selected' : '' ?>>TL</option>
+                            <option value="TO" <?= ($jurusan_terpilih == 'TO') ? 'selected' : '' ?>>TO</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-wrapper d-flex align-items-center gap-2">
+                        <label for="tanggal" class="fw-bold text-muted small mb-0 text-nowrap"><i class="bi bi-calendar-event me-1"></i>Tanggal:</label>
+                        <input type="date" id="tanggal" name="tanggal" class="form-control form-control-sm border-0 shadow-sm" style="width: auto;" value="<?= $tanggal ?>" required>
+
+                        <button type="submit" class="btn btn-sm btn-primary shadow-sm"><i class="bi bi-search"></i> Cari</button>
+                        <a href="<?= base_url('guru') ?>" class="btn btn-sm btn-light border shadow-sm" title="Reset ke hari ini"><i class="bi bi-arrow-clockwise"></i></a>
+                    </div>
+
                 </form>
             </div>
         </div>
