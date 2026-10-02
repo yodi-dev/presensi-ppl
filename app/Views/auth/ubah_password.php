@@ -10,7 +10,7 @@
     }
 
     .password-header {
-        background-color: #003366;
+        background: linear-gradient(135deg, #0f5132, #0a3622);
         color: white;
         padding: 2.5rem 1.5rem;
         text-align: center;
@@ -24,18 +24,18 @@
     .form-control {
         border-radius: 0.5rem;
         padding: 0.75rem 1rem;
-        background-color: #f8f9fa;
+        background-color: #f8fafc;
         border: 1px solid #dee2e6;
     }
 
     .form-control:focus {
         background-color: #fff;
-        border-color: #003366;
-        box-shadow: 0 0 0 0.2rem rgba(0, 51, 102, 0.25);
+        border-color: #10b981;
+        box-shadow: 0 0 0 0.2rem rgba(16, 185, 129, 0.2);
     }
 
     .input-group-text {
-        background-color: #f8f9fa;
+        background-color: #f8fafc;
         border: 1px solid #dee2e6;
         color: #6c757d;
     }
@@ -45,18 +45,18 @@
     }
 
     .btn-primary-custom {
-        background-color: #003366;
-        border-color: #003366;
-        border-radius: 0.5rem;
+        background-color: #0f5132;
+        border-color: #0f5132;
+        border-radius: 2rem;
         padding: 0.75rem;
         font-weight: 600;
         transition: all 0.3s ease;
     }
 
     .btn-primary-custom:hover {
-        background-color: #002244;
+        background-color: #0a3622;
         transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(0, 51, 102, 0.2);
+        box-shadow: 0 5px 15px rgba(15, 81, 50, 0.25);
     }
 
     .btn-outline-custom {

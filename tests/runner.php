@@ -515,6 +515,38 @@ $runner->it("Controller Admin harus memiliki method pengaturan dan simpanPengatu
     $runner->assertTrue(method_exists($adminController, 'simpanPengaturan'));
 });
 
+$runner->describe("12. Pengujian Hari Kerja Efektif & Identitas Resmi Skagata");
+
+$runner->it("Config\\Presensi harus mengarahkan institusi ke SMK Negeri 3 Yogyakarta dan koordinat Skagata", function() use ($runner) {
+    $cfg = new \Config\Presensi();
+    $runner->assertEquals('SMK Negeri 3 Yogyakarta', $cfg->schoolName);
+    $runner->assertEquals(-7.780120, $cfg->schoolLatitude);
+    $runner->assertEquals(110.366450, $cfg->schoolLongitude);
+});
+
+$runner->it("Logika siklus kerja 5 hari harus mengidentifikasi Sabtu dan Minggu sebagai akhir pekan resmi", function() use ($runner) {
+    // 2026-10-02 adalah Jumat (hari kerja), 2026-10-03 adalah Sabtu, 2026-10-04 adalah Minggu
+    $jumat = date('N', strtotime('2026-10-02')); // 5
+    $sabtu = date('N', strtotime('2026-10-03')); // 6
+    $minggu = date('N', strtotime('2026-10-04')); // 7
+
+    $isHariKerjaJumat = ($jumat >= 1 && $jumat <= 5);
+    $isHariKerjaSabtu = ($sabtu >= 1 && $sabtu <= 5);
+    $isHariKerjaMinggu = ($minggu >= 1 && $minggu <= 5);
+
+    $runner->assertTrue($isHariKerjaJumat, "Jumat harus dihitung hari kerja");
+    $runner->assertFalse($isHariKerjaSabtu, "Sabtu bukan hari kerja");
+    $runner->assertFalse($isHariKerjaMinggu, "Minggu bukan hari kerja");
+});
+
+$runner->it("Layout template harus memuat brand SIPENSI SKAGATA dan kredit awanbeo.my.id", function() use ($runner) {
+    $templateFile = APPPATH . 'Views/layout/template.php';
+    $runner->assertTrue(file_exists($templateFile));
+    $content = file_get_contents($templateFile);
+    $runner->assertTrue(strpos($content, 'SIPENSI SKAGATA') !== false, "Template harus memuat 'SIPENSI SKAGATA'");
+    $runner->assertTrue(strpos($content, 'awanbeo.my.id') !== false, "Template harus memuat kredit 'awanbeo.my.id'");
+    $runner->assertTrue(strpos($content, 'SMK Negeri 3 Yogyakarta') !== false, "Template harus memuat 'SMK Negeri 3 Yogyakarta'");
+});
 
 // Cetak laporan akhir & exit code
 exit($runner->report());

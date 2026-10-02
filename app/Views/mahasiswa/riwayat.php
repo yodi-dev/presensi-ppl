@@ -4,21 +4,22 @@
 <style>
     .history-card {
         border-radius: 1rem;
-        border: none;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 4px 20px rgba(15, 81, 50, 0.05);
+        background: #ffffff;
         overflow: hidden;
     }
 
     .card-header-custom {
         background-color: #ffffff;
-        border-bottom: 2px solid #f8f9fa;
-        padding: 1.5rem;
+        border-bottom: 1px solid #f1f5f9;
+        padding: 1.25rem 1.5rem;
     }
 
     .stat-card {
         border-radius: 0.75rem;
-        border: none;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
         transition: transform 0.2s;
     }
 
@@ -27,37 +28,42 @@
     }
 
     .table-custom thead th {
-        background-color: #003366;
+        background-color: #0f5132;
         color: #ffffff;
-        font-weight: 500;
+        font-weight: 600;
         border-bottom: none;
         padding: 0.85rem;
         white-space: nowrap;
+        font-size: 0.85rem;
     }
 
     .table-custom tbody td {
         padding: 0.85rem;
         vertical-align: middle;
+        font-size: 0.875rem;
     }
 
     .filter-wrapper {
-        background-color: #f8f9fa;
-        border-radius: 0.5rem;
-        padding: 0.5rem 1rem;
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 0.75rem;
+        padding: 0.4rem 0.75rem;
     }
 </style>
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
-<div class="container mt-4 mb-5">
+<div class="container py-4">
 
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
         <div>
-            <h3 class="fw-bold text-dark mb-0"><i class="bi bi-clock-history text-primary me-2"></i>Riwayat Presensi Mandiri</h3>
-            <p class="text-muted mt-1 mb-0">Catatan riwayat kehadiran <strong><?= esc(session()->get('nama')) ?></strong></p>
+            <h4 class="fw-bold text-dark mb-0">
+                <i class="bi bi-clock-history text-success me-2"></i>Riwayat Presensi Mandiri
+            </h4>
+            <p class="text-muted small mt-1 mb-0">Catatan riwayat kehadiran <strong><?= esc(session()->get('nama')) ?></strong> di SMKN 3 Yogyakarta</p>
         </div>
         <div>
-            <a href="<?= base_url('mahasiswa') ?>" class="btn btn-outline-secondary rounded-pill shadow-sm px-4">
+            <a href="<?= base_url('mahasiswa') ?>" class="btn btn-outline-secondary btn-sm rounded-pill px-3">
                 <i class="bi bi-arrow-left me-1"></i> Dashboard
             </a>
         </div>
@@ -67,53 +73,53 @@
     <div class="row g-3 mb-4">
         <div class="col-6 col-md-4 col-lg-2">
             <div class="card stat-card bg-white p-3 text-center border-start border-4 border-success">
-                <small class="text-muted fw-semibold">Hadir</small>
+                <small class="text-muted fw-semibold" style="font-size: 0.75rem;">Hadir</small>
                 <h3 class="fw-bold text-success mb-0 mt-1"><?= $rekap['hadir'] ?></h3>
             </div>
         </div>
         <div class="col-6 col-md-4 col-lg-2">
             <div class="card stat-card bg-white p-3 text-center border-start border-4 border-warning">
-                <small class="text-muted fw-semibold">Terlambat</small>
+                <small class="text-muted fw-semibold" style="font-size: 0.75rem;">Terlambat</small>
                 <h3 class="fw-bold text-warning mb-0 mt-1"><?= $rekap['terlambat'] ?></h3>
             </div>
         </div>
         <div class="col-6 col-md-4 col-lg-2">
             <div class="card stat-card bg-white p-3 text-center border-start border-4 border-info">
-                <small class="text-muted fw-semibold">Izin</small>
+                <small class="text-muted fw-semibold" style="font-size: 0.75rem;">Izin</small>
                 <h3 class="fw-bold text-info mb-0 mt-1"><?= $rekap['izin'] ?></h3>
             </div>
         </div>
         <div class="col-6 col-md-4 col-lg-2">
             <div class="card stat-card bg-white p-3 text-center border-start border-4 border-secondary">
-                <small class="text-muted fw-semibold">Sakit</small>
+                <small class="text-muted fw-semibold" style="font-size: 0.75rem;">Sakit</small>
                 <h3 class="fw-bold text-secondary mb-0 mt-1"><?= $rekap['sakit'] ?></h3>
             </div>
         </div>
         <div class="col-6 col-md-4 col-lg-2">
             <div class="card stat-card bg-white p-3 text-center border-start border-4 border-danger">
-                <small class="text-muted fw-semibold">Alpa</small>
+                <small class="text-muted fw-semibold" style="font-size: 0.75rem;">Alpa</small>
                 <h3 class="fw-bold text-danger mb-0 mt-1"><?= $rekap['alpa'] ?></h3>
             </div>
         </div>
         <div class="col-6 col-md-4 col-lg-2">
-            <div class="card stat-card bg-white p-3 text-center border-start border-4 border-primary">
-                <small class="text-muted fw-semibold">Total Rekap</small>
-                <h3 class="fw-bold text-primary mb-0 mt-1"><?= array_sum($rekap) ?></h3>
+            <div class="card stat-card bg-white p-3 text-center border-start border-4 border-dark">
+                <small class="text-muted fw-semibold" style="font-size: 0.75rem;">Total Presensi</small>
+                <h3 class="fw-bold text-dark mb-0 mt-1"><?= array_sum($rekap) ?></h3>
             </div>
         </div>
     </div>
 
-    <!-- Card Riwayat dan Filter -->
+    <!-- Card Riwayat dan Filter Otomatis ala Sibenka -->
     <div class="card history-card">
         <div class="card-header-custom d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
             <div>
-                <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-calendar3 me-2"></i>Daftar Presensi</h5>
+                <h6 class="mb-0 fw-bold text-dark"><i class="bi bi-calendar3 me-2 text-success"></i>Daftar Presensi Bulanan</h6>
             </div>
 
             <form action="<?= base_url('mahasiswa/riwayat') ?>" method="GET" class="filter-wrapper d-flex align-items-center flex-wrap gap-2 m-0">
-                <div class="input-group input-group-sm shadow-sm" style="width: auto;">
-                    <span class="input-group-text bg-white border-end-0"><i class="bi bi-calendar-month text-muted"></i></span>
-                    <select name="bulan" class="form-select border-start-0" required>
+                <div class="input-group input-group-sm" style="width: auto;">
+                    <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-calendar-month"></i></span>
+                    <select name="bulan" class="form-select border-start-0" onchange="this.form.submit()">
                         <?php
                         $namaBulan = ['01' => 'Januari', '02' => 'Februari', '03' => 'Maret', '04' => 'April', '05' => 'Mei', '06' => 'Juni', '07' => 'Juli', '08' => 'Agustus', '09' => 'September', '10' => 'Oktober', '11' => 'November', '12' => 'Desember'];
                         foreach ($namaBulan as $angka => $nama):
@@ -125,9 +131,9 @@
                     </select>
                 </div>
 
-                <div class="input-group input-group-sm shadow-sm" style="width: auto;">
-                    <span class="input-group-text bg-white border-end-0"><i class="bi bi-calendar-event text-muted"></i></span>
-                    <select name="tahun" class="form-select border-start-0" required>
+                <div class="input-group input-group-sm" style="width: auto;">
+                    <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-calendar-event"></i></span>
+                    <select name="tahun" class="form-select border-start-0" onchange="this.form.submit()">
                         <?php
                         $tahunSekarang = date('Y');
                         for ($t = $tahunSekarang; $t >= 2023; $t--):
@@ -138,10 +144,6 @@
                         <?php endfor; ?>
                     </select>
                 </div>
-
-                <button type="submit" class="btn btn-sm btn-primary shadow-sm px-3">
-                    <i class="bi bi-search me-1"></i> Tampilkan
-                </button>
             </form>
         </div>
 
@@ -162,7 +164,7 @@
                     <?php if (empty($riwayat)): ?>
                         <tr>
                             <td colspan="7" class="text-center py-5 text-muted">
-                                <i class="bi bi-folder-x fs-1 d-block mb-2 text-black-50"></i>
+                                <i class="bi bi-calendar-x fs-1 d-block mb-2 text-muted"></i>
                                 Belum ada data presensi pada bulan ini.
                             </td>
                         </tr>
@@ -176,29 +178,29 @@
                                     <?php if ($row['status'] === 'hadir'): ?>
                                         <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">Hadir</span>
                                     <?php elseif ($row['status'] === 'terlambat'): ?>
-                                        <span class="badge bg-warning-subtle text-dark border border-warning px-2 py-1">Terlambat</span>
+                                        <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-2 py-1">Terlambat</span>
                                     <?php elseif ($row['status'] === 'izin'): ?>
                                         <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle px-2 py-1">Izin</span>
                                     <?php elseif ($row['status'] === 'sakit'): ?>
-                                        <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-2 py-1">Sakit</span>
+                                        <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2 py-1">Sakit</span>
                                     <?php elseif ($row['status'] === 'alpa'): ?>
-                                        <span class="badge bg-danger-subtle text-danger-emphasis border border-danger-subtle px-2 py-1">Alpa</span>
+                                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1">Alpa</span>
                                     <?php else: ?>
-                                        <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2 py-1"><?= esc($row['status']) ?></span>
+                                        <span class="badge bg-light text-dark border px-2 py-1"><?= esc($row['status']) ?></span>
                                     <?php endif; ?>
                                 </td>
 
                                 <td><span class="fw-semibold <?= !empty($row['jam_masuk']) ? ($row['status'] === 'terlambat' ? 'text-warning' : 'text-success') : 'text-muted' ?>"><?= esc($row['jam_masuk'] ?: '--:--') ?></span></td>
-                                <td><span class="fw-semibold <?= !empty($row['jam_keluar']) ? 'text-warning' : 'text-muted' ?>"><?= esc($row['jam_keluar'] ?: '--:--') ?></span></td>
+                                <td><span class="fw-semibold <?= !empty($row['jam_keluar']) ? 'text-dark' : 'text-muted' ?>"><?= esc($row['jam_keluar'] ?: '--:--') ?></span></td>
 
                                 <td class="text-start text-muted small">
-                                    <?= !empty($row['keterangan']) ? esc($row['keterangan']) : '<span class="text-black-50 fst-italic">-</span>' ?>
+                                    <?= !empty($row['keterangan']) ? esc($row['keterangan']) : '<span class="text-muted fst-italic">-</span>' ?>
                                 </td>
 
                                 <td>
                                     <?php if (!empty($row['bukti_surat'])): ?>
-                                        <a href="<?= base_url('uploads/surat/' . esc($row['bukti_surat'])) ?>" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                                            <i class="bi bi-file-earmark-check me-1"></i> Lihat Bukti
+                                        <a href="<?= base_url('uploads/surat/' . esc($row['bukti_surat'])) ?>" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-success rounded-pill px-3">
+                                            <i class="bi bi-file-earmark-check me-1"></i> Bukti Surat
                                         </a>
                                     <?php elseif (in_array($row['status'], ['izin', 'sakit'], true)): ?>
                                         <button type="button" class="btn btn-sm btn-outline-warning rounded-pill px-3" onclick="bukaModalSusulan(<?= (int) $row['id'] ?>, '<?= esc($row['tanggal']) ?>')">
@@ -221,9 +223,9 @@
 <!-- Modal Upload Bukti Susulan -->
 <div class="modal fade" id="modalSusulan" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header bg-light border-0">
-                <h5 class="modal-title fw-bold">Upload Bukti Susulan</h5>
+        <div class="modal-content border-0 shadow rounded-4">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-dark">Upload Bukti Surat Susulan</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="<?= base_url('mahasiswa/upload-bukti-susulan') ?>" method="POST" enctype="multipart/form-data">
@@ -234,14 +236,14 @@
                         Mengunggah berkas surat dokter atau keterangan izin untuk presensi tanggal: <strong id="susulanTanggalText" class="text-dark"></strong>
                     </p>
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">Pilih Berkas Bukti</label>
+                        <label class="form-label fw-semibold small">Pilih Berkas Bukti</label>
                         <input type="file" name="bukti_surat" class="form-control" accept=".jpg,.jpeg,.png,.webp,.pdf" required>
-                        <div class="form-text">Maksimal 2MB. Format didukung: JPG, PNG, WEBP, atau PDF.</div>
+                        <div class="form-text small">Maksimal 2MB. Format didukung: JPG, PNG, WEBP, atau PDF.</div>
                     </div>
                 </div>
-                <div class="modal-footer border-0 bg-light">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary px-4">Unggah Berkas</button>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-light rounded-pill px-3" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-skagata rounded-pill px-4">Unggah Berkas</button>
                 </div>
             </form>
         </div>

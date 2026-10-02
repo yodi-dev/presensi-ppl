@@ -14,17 +14,17 @@ class SettingSeeder extends Seeder
         $data = [
             [
                 'setting_key'   => 'school_name',
-                'setting_value' => 'SMK Negeri 2 Yogyakarta',
+                'setting_value' => 'SMK Negeri 3 Yogyakarta',
                 'updated_at'    => $now
             ],
             [
                 'setting_key'   => 'school_latitude',
-                'setting_value' => '-7.795600',
+                'setting_value' => '-7.780120',
                 'updated_at'    => $now
             ],
             [
                 'setting_key'   => 'school_longitude',
-                'setting_value' => '110.369500',
+                'setting_value' => '110.366450',
                 'updated_at'    => $now
             ],
             [

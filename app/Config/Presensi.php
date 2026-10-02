@@ -9,13 +9,13 @@ class Presensi extends BaseConfig
     /**
      * Nama Sekolah / Institusi
      */
-    public string $schoolName = 'SMK Negeri 2 Yogyakarta';
+    public string $schoolName = 'SMK Negeri 3 Yogyakarta';
 
     /**
-     * Titik Koordinat Pusat Sekolah / Tempat PPL
+     * Titik Koordinat Pusat Sekolah / Tempat PPL (SMKN 3 Yogyakarta)
      */
-    public float $schoolLatitude = -7.7956;
-    public float $schoolLongitude = 110.3695;
+    public float $schoolLatitude = -7.780120;
+    public float $schoolLongitude = 110.366450;
 
     /**
      * Radius toleransi kehadiran dalam satuan meter (default: 100 meter)
