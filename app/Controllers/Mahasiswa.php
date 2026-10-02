@@ -55,16 +55,18 @@ class Mahasiswa extends BaseController
             }
 
             // 2. Validasi Geofencing Radius Sekolah (Formula Haversine)
-            $jarak = PresensiConfig::hitungJarak(
-                $latFloat,
-                $longFloat,
-                $config->schoolLatitude,
-                $config->schoolLongitude
-            );
+            if ($config->geofenceActive) {
+                $jarak = PresensiConfig::hitungJarak(
+                    $latFloat,
+                    $longFloat,
+                    $config->schoolLatitude,
+                    $config->schoolLongitude
+                );
 
-            if ($jarak > $config->schoolRadius) {
-                $jarakBulat = round($jarak);
-                return redirect()->to('/mahasiswa')->with('error', "Presensi ditolak! Anda berada di luar radius sekolah. Jarak Anda: {$jarakBulat} meter (Maksimal: {$config->schoolRadius} meter).");
+                if ($jarak > $config->schoolRadius) {
+                    $jarakBulat = round($jarak);
+                    return redirect()->to('/mahasiswa')->with('error', "Presensi ditolak! Anda berada di luar radius sekolah. Jarak Anda: {$jarakBulat} meter (Maksimal: {$config->schoolRadius} meter).");
+                }
             }
 
             // 3. Kebijakan Jam Masuk & Penentuan Keterlambatan

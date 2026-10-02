@@ -190,4 +190,77 @@ class Admin extends BaseController
 
         return redirect()->to('/admin')->with('pesan', "Password untuk pengguna {$user['nama']} berhasil direset!");
     }
+
+    public function pengaturan()
+    {
+        $config = config('Presensi') ?? new \Config\Presensi();
+        $settings = \App\Models\SettingModel::getAllSettings();
+
+        $data = [
+            'school_name'      => $settings['school_name'] ?? $config->schoolName,
+            'school_latitude'  => (float) ($settings['school_latitude'] ?? $config->schoolLatitude),
+            'school_longitude' => (float) ($settings['school_longitude'] ?? $config->schoolLongitude),
+            'school_radius'    => (int) ($settings['school_radius'] ?? $config->schoolRadius),
+            'jam_masuk_max'    => $settings['jam_masuk_max'] ?? $config->jamMasukMax,
+            'jam_pulang_min'   => $settings['jam_pulang_min'] ?? $config->jamPulangMin,
+            'geofence_active'  => isset($settings['geofence_active']) ? ($settings['geofence_active'] === '1' || $settings['geofence_active'] === 'true') : $config->geofenceActive,
+            'title'            => 'Pengaturan Lokasi & Jam Presensi - Admin'
+        ];
+
+        return view('admin/pengaturan', $data);
+    }
+
+    public function simpanPengaturan()
+    {
+        $schoolName = trim(strip_tags((string) $this->request->getPost('school_name')));
+        $lat = $this->request->getPost('school_latitude');
+        $lng = $this->request->getPost('school_longitude');
+        $radius = $this->request->getPost('school_radius');
+        $jamMasuk = trim((string) $this->request->getPost('jam_masuk_max'));
+        $jamPulang = trim((string) $this->request->getPost('jam_pulang_min'));
+        $geofenceActive = $this->request->getPost('geofence_active') ? '1' : '0';
+
+        // Validasi input
+        if (empty($schoolName) || mb_strlen($schoolName) < 3) {
+            return redirect()->back()->withInput()->with('error', 'Nama institusi/sekolah minimal 3 karakter!');
+        }
+
+        if (!is_numeric($lat) || (float) $lat < -90 || (float) $lat > 90) {
+            return redirect()->back()->withInput()->with('error', 'Latitude harus berupa angka valid antara -90 dan 90!');
+        }
+
+        if (!is_numeric($lng) || (float) $lng < -180 || (float) $lng > 180) {
+            return redirect()->back()->withInput()->with('error', 'Longitude harus berupa angka valid antara -180 dan 180!');
+        }
+
+        if (!is_numeric($radius) || (int) $radius < 10 || (int) $radius > 5000) {
+            return redirect()->back()->withInput()->with('error', 'Radius harus berupa angka antara 10 sampai 5000 meter!');
+        }
+
+        // Format jam HH:MM atau HH:MM:SS
+        if (!preg_match('/^(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d)?$/', $jamMasuk)) {
+            return redirect()->back()->withInput()->with('error', 'Format Jam Masuk Maksimal tidak valid (HH:MM atau HH:MM:SS)!');
+        }
+        if (strlen($jamMasuk) === 5) {
+            $jamMasuk .= ':00';
+        }
+
+        if (!preg_match('/^(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d)?$/', $jamPulang)) {
+            return redirect()->back()->withInput()->with('error', 'Format Jam Pulang Minimal tidak valid (HH:MM atau HH:MM:SS)!');
+        }
+        if (strlen($jamPulang) === 5) {
+            $jamPulang .= ':00';
+        }
+
+        // Simpan ke SettingModel
+        \App\Models\SettingModel::setSetting('school_name', $schoolName);
+        \App\Models\SettingModel::setSetting('school_latitude', (string) ((float) $lat));
+        \App\Models\SettingModel::setSetting('school_longitude', (string) ((float) $lng));
+        \App\Models\SettingModel::setSetting('school_radius', (string) ((int) $radius));
+        \App\Models\SettingModel::setSetting('jam_masuk_max', $jamMasuk);
+        \App\Models\SettingModel::setSetting('jam_pulang_min', $jamPulang);
+        \App\Models\SettingModel::setSetting('geofence_active', $geofenceActive);
+
+        return redirect()->to('/admin/pengaturan')->with('pesan', 'Pengaturan lokasi presensi dan jam kerja berhasil disimpan!');
+    }
 }

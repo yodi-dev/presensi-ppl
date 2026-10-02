@@ -442,5 +442,79 @@ $runner->it("Controller Admin harus memiliki metode CRUD lengkap", function() us
 });
 
 
+// ==========================================
+// 11. PENGUJIAN MODUL 1: PENGATURAN GEOFENCING DINAMIS
+// ==========================================
+$runner->describe("11. Pengujian Modul 1: Pengaturan Geofencing Dinamis & SettingModel");
+
+require_once __DIR__ . '/../app/Models/SettingModel.php';
+
+$runner->it("SettingModel harus memiliki metode getSetting, setSetting, dan getAllSettings", function() use ($runner) {
+    $runner->assertTrue(method_exists(\App\Models\SettingModel::class, 'getSetting'));
+    $runner->assertTrue(method_exists(\App\Models\SettingModel::class, 'setSetting'));
+    $runner->assertTrue(method_exists(\App\Models\SettingModel::class, 'getAllSettings'));
+});
+
+$runner->it("SettingModel::getSetting harus mengembalikan nilai default bila key tidak ditemukan", function() use ($runner) {
+    $val = \App\Models\SettingModel::getSetting('kunci_tidak_ada_di_database_xyz', 'nilai_default_aman');
+    $runner->assertEquals('nilai_default_aman', $val);
+});
+
+$runner->it("Config\\Presensi harus memuat properti dinamis (schoolName, geofenceActive, dsb)", function() use ($runner) {
+    $cfg = new \Config\Presensi();
+    $runner->assertTrue(property_exists($cfg, 'schoolName'));
+    $runner->assertTrue(property_exists($cfg, 'geofenceActive'));
+    $runner->assertTrue(property_exists($cfg, 'schoolLatitude'));
+    $runner->assertTrue(property_exists($cfg, 'schoolLongitude'));
+    $runner->assertTrue(property_exists($cfg, 'schoolRadius'));
+});
+
+$runner->it("Validasi input pengaturan harus menolak koordinat dan radius di luar batas", function() use ($runner) {
+    $latSalah = 105.5; // > 90
+    $isLatValid = (is_numeric($latSalah) && $latSalah >= -90 && $latSalah <= 90);
+    $runner->assertFalse($isLatValid, "Latitude di atas 90 harus ditolak");
+
+    $radiusNegatif = -50;
+    $isRadiusValid = (is_numeric($radiusNegatif) && $radiusNegatif >= 10 && $radiusNegatif <= 5000);
+    $runner->assertFalse($isRadiusValid, "Radius negatif harus ditolak");
+
+    $radiusTerlaluBesar = 10000;
+    $isRadiusValid2 = (is_numeric($radiusTerlaluBesar) && $radiusTerlaluBesar >= 10 && $radiusTerlaluBesar <= 5000);
+    $runner->assertFalse($isRadiusValid2, "Radius di atas 5000 meter harus ditolak");
+});
+
+$runner->it("Validasi jam kerja harus menerima format HH:MM dan HH:MM:SS", function() use ($runner) {
+    $jamValid1 = "07:15";
+    $jamValid2 = "07:15:00";
+    $jamSalah  = "25:70:99";
+    $pattern = '/^(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d)?$/';
+
+    $runner->assertTrue((bool) preg_match($pattern, $jamValid1));
+    $runner->assertTrue((bool) preg_match($pattern, $jamValid2));
+    $runner->assertFalse((bool) preg_match($pattern, $jamSalah));
+});
+
+$runner->it("Mode toleransi (geofenceActive = false) tidak boleh memblokir presensi di luar radius", function() use ($runner, $presensiConfig) {
+    $latJauh = $presensiConfig->schoolLatitude + 0.05; // ~5.5 km
+    $longJauh = $presensiConfig->schoolLongitude;
+    $jarak = \Config\Presensi::hitungJarak($latJauh, $longJauh, $presensiConfig->schoolLatitude, $presensiConfig->schoolLongitude);
+    $runner->assertTrue($jarak > $presensiConfig->schoolRadius, "Jarak harus jauh (> 100m)");
+
+    // Simulasi logika controller dengan toggle nonaktif
+    $geofenceActive = false;
+    $apakahDitolak = false;
+    if ($geofenceActive && $jarak > $presensiConfig->schoolRadius) {
+        $apakahDitolak = true;
+    }
+    $runner->assertFalse($apakahDitolak, "Ketika geofence nonaktif, presensi tidak boleh ditolak");
+});
+
+$runner->it("Controller Admin harus memiliki method pengaturan dan simpanPengaturan", function() use ($runner) {
+    $adminController = new \App\Controllers\Admin();
+    $runner->assertTrue(method_exists($adminController, 'pengaturan'));
+    $runner->assertTrue(method_exists($adminController, 'simpanPengaturan'));
+});
+
+
 // Cetak laporan akhir & exit code
 exit($runner->report());

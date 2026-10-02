@@ -118,4 +118,14 @@ class SecurityAuditTest extends CIUnitTestCase
     {
         $this->assertTrue(method_exists(\App\Controllers\Guru::class, 'exportExcel'));
     }
+
+    public function testSettingModelAndAdminSettingsExist(): void
+    {
+        $this->assertTrue(class_exists(\App\Models\SettingModel::class));
+        $this->assertTrue(method_exists(\App\Models\SettingModel::class, 'getSetting'));
+        $this->assertTrue(method_exists(\App\Models\SettingModel::class, 'setSetting'));
+        $this->assertTrue(method_exists(\App\Models\SettingModel::class, 'getAllSettings'));
+        $this->assertTrue(method_exists(\App\Controllers\Admin::class, 'pengaturan'));
+        $this->assertTrue(method_exists(\App\Controllers\Admin::class, 'simpanPengaturan'));
+    }
 }

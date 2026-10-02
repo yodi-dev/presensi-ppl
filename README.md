@@ -87,10 +87,10 @@ database.default.DBDriver = MySQLi
 
 ### 3. Setup Database
 1. Buat database baru di MySQL dengan nama `db_presensi`.
-2. Pastikan tabel `users`, `presensi`, dan `piket_kbm` telah diimpor ke database.
-3. Jalankan Seeder akun bawaan jika diperlukan:
+2. Pastikan tabel `users`, `presensi`, `piket_kbm`, dan `settings` telah tersedia.
+3. Jalankan DatabaseSeeder untuk mengisi data awal administrator, guru, mahasiswa, dan pengaturan sekolah:
 ```bash
-php spark db:seed UserSeeder
+php spark db:seed DatabaseSeeder
 ```
 
 ### 4. Menjalankan Aplikasi
@@ -109,7 +109,7 @@ Buka browser dan akses alamat: `http://localhost:8080` (atau via virtual host La
 | **Admin** | `admin` | `admin123` | Administrator Sistem |
 | **Guru** | `febriyana` | `secret` | Akun Pembimbing |
 | **Guru** | `jumari` | `secret` | Akun Pembimbing |
-| **Mahasiswa** | `awan` | `secret12` | Mahasiswa Informatika |
+| **Mahasiswa** | `awan` | `secret` | Mahasiswa Informatika |
 | **Mahasiswa** | `fajar` | `secret` | Mahasiswa Informatika |
 | **Mahasiswa** | `latifah` | `secret` | Mahasiswa BK |
 
@@ -124,7 +124,7 @@ Jalankan pengujian melalui terminal:
 php tests/runner.php
 ```
 
-Pengujian (34 skenario pengujian) mencakup:
+Pengujian (41 skenario pengujian) mencakup:
 1. Verifikasi penolakan akses tamu pada rute terproteksi (`AuthFilter`).
 2. Verifikasi pemisahan hak akses Guru, Mahasiswa, dan Admin (`RoleFilter`).
 3. Pengujian keamanan upload bukti piket (validasi binary, ekstensi, dan `.htaccess`).
@@ -135,6 +135,7 @@ Pengujian (34 skenario pengujian) mencakup:
 8. Pengujian kebijakan jam kerja & deteksi status keterlambatan serta pembatasan checkout dini.
 9. Pengujian hak akses Admin dan pencegahan self-delete akun admin.
 10. Pengujian format unduhan Excel (.xls) dan whitelist status presensi.
+11. Pengujian pengaturan geofencing dinamis, toleransi bypass, dan SettingModel.
 
 ---
 

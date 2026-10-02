@@ -53,6 +53,9 @@
             <p class="text-muted mt-1 mb-0">Manajemen Pengguna &amp; Akun Presensi PPL</p>
         </div>
         <div class="d-flex flex-wrap gap-2">
+            <a href="<?= base_url('admin/pengaturan') ?>" class="btn btn-outline-primary rounded-pill px-3 shadow-sm">
+                Pengaturan Presensi
+            </a>
             <button type="button" class="btn btn-primary rounded-pill px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalTambahUser">
                 + Tambah Pengguna
             </button>
