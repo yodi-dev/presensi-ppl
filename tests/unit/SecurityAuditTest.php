@@ -73,4 +73,49 @@ class SecurityAuditTest extends CIUnitTestCase
         $this->assertStringNotContainsString('VbX4pzFXTf', $content);
         $this->assertStringNotContainsString('sql204.infinityfree.com', $content);
     }
+
+    public function testGeofencingHaversineCalculatesDistanceCorrectly(): void
+    {
+        $config = config('Presensi') ?? new \Config\Presensi();
+        $jarakSama = \Config\Presensi::hitungJarak(
+            $config->schoolLatitude,
+            $config->schoolLongitude,
+            $config->schoolLatitude,
+            $config->schoolLongitude
+        );
+        $this->assertLessThan(1.0, $jarakSama);
+
+        $latJauh = $config->schoolLatitude + 0.005;
+        $jarakJauh = \Config\Presensi::hitungJarak(
+            $latJauh,
+            $config->schoolLongitude,
+            $config->schoolLatitude,
+            $config->schoolLongitude
+        );
+        $this->assertGreaterThan($config->schoolRadius, $jarakJauh);
+    }
+
+    public function testTardinessPolicyLogic(): void
+    {
+        $config = config('Presensi') ?? new \Config\Presensi();
+        $this->assertTrue("07:20:00" > $config->jamMasukMax);
+        $this->assertFalse("07:05:00" > $config->jamMasukMax);
+        $this->assertTrue("13:00:00" < $config->jamPulangMin);
+        $this->assertFalse("15:30:00" < $config->jamPulangMin);
+    }
+
+    public function testAdminControllerAndMethodsExist(): void
+    {
+        $this->assertTrue(class_exists(\App\Controllers\Admin::class));
+        $this->assertTrue(method_exists(\App\Controllers\Admin::class, 'index'));
+        $this->assertTrue(method_exists(\App\Controllers\Admin::class, 'tambahUser'));
+        $this->assertTrue(method_exists(\App\Controllers\Admin::class, 'editUser'));
+        $this->assertTrue(method_exists(\App\Controllers\Admin::class, 'hapusUser'));
+        $this->assertTrue(method_exists(\App\Controllers\Admin::class, 'resetPassword'));
+    }
+
+    public function testGuruExportExcelMethodExists(): void
+    {
+        $this->assertTrue(method_exists(\App\Controllers\Guru::class, 'exportExcel'));
+    }
 }

@@ -9,7 +9,11 @@ class Auth extends BaseController
     public function index()
     {
         if (session()->get('isLoggedIn')) {
-            return redirect()->to(session()->get('role') === 'guru' ? '/guru' : '/mahasiswa');
+            $role = session()->get('role');
+            if ($role === 'admin') {
+                return redirect()->to('/admin');
+            }
+            return redirect()->to($role === 'guru' ? '/guru' : '/mahasiswa');
         }
 
         return view('auth/login');
@@ -28,7 +32,7 @@ class Auth extends BaseController
         $user = $userModel->where('username', $username)->first();
 
         if ($user) {
-            // Cek kecocokan password (sementara kita pakai teks biasa tanpa hash biar gampang testingnya)
+            // Cek kecocokan password
             if (password_verify($password, $user['password'])) {
 
                 // Jika benar, simpan data user ke Session
@@ -41,7 +45,9 @@ class Auth extends BaseController
                 $session->set($dataSession);
 
                 // Arahkan ke halaman sesuai role
-                if ($user['role'] == 'guru') {
+                if ($user['role'] === 'admin') {
+                    return redirect()->to('/admin');
+                } elseif ($user['role'] === 'guru') {
                     return redirect()->to('/guru');
                 } else {
                     return redirect()->to('/mahasiswa');

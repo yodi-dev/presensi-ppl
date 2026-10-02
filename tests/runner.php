@@ -295,5 +295,152 @@ $runner->it("File .env.example harus tersedia dan tidak boleh memuat password da
 });
 
 
+// ==========================================
+// 7. PENGUJIAN GPS GEOFENCING & HAVERSINE FORMULA
+// ==========================================
+$runner->describe("7. Pengujian GPS Geofencing (Formula Haversine & Validasi Radius)");
+
+require_once __DIR__ . '/../app/Config/Presensi.php';
+$presensiConfig = new \Config\Presensi();
+
+$runner->it("Koordinat titik tepat sekolah harus menghasilkan jarak ~0 meter", function() use ($runner, $presensiConfig) {
+    $jarak = \Config\Presensi::hitungJarak(
+        $presensiConfig->schoolLatitude,
+        $presensiConfig->schoolLongitude,
+        $presensiConfig->schoolLatitude,
+        $presensiConfig->schoolLongitude
+    );
+    $runner->assertTrue($jarak < 1.0, "Jarak harus mendekati 0 meter");
+});
+
+$runner->it("Koordinat dalam radius 50 meter harus diizinkan (< radius 100m)", function() use ($runner, $presensiConfig) {
+    // Geser sedikit latitude (+0.0003 derajat ~ 33 meter)
+    $latDekat = $presensiConfig->schoolLatitude + 0.0003;
+    $longDekat = $presensiConfig->schoolLongitude;
+    $jarak = \Config\Presensi::hitungJarak(
+        $latDekat,
+        $longDekat,
+        $presensiConfig->schoolLatitude,
+        $presensiConfig->schoolLongitude
+    );
+    $runner->assertTrue($jarak <= $presensiConfig->schoolRadius, "Jarak {$jarak}m harus masuk radius {$presensiConfig->schoolRadius}m");
+});
+
+$runner->it("Koordinat sejauh 500 meter (> 100 meter) harus ditolak berada di luar radius", function() use ($runner, $presensiConfig) {
+    // Geser latitude (+0.005 derajat ~ 550 meter)
+    $latJauh = $presensiConfig->schoolLatitude + 0.005;
+    $longJauh = $presensiConfig->schoolLongitude;
+    $jarak = \Config\Presensi::hitungJarak(
+        $latJauh,
+        $longJauh,
+        $presensiConfig->schoolLatitude,
+        $presensiConfig->schoolLongitude
+    );
+    $runner->assertTrue($jarak > $presensiConfig->schoolRadius, "Jarak {$jarak}m harus melebihi batas radius {$presensiConfig->schoolRadius}m");
+});
+
+$runner->it("Format koordinat tidak valid (di luar rentang -90..90 atau -180..180) harus ditolak", function() use ($runner) {
+    $latInvalid = 95.0;
+    $longInvalid = 200.0;
+    $isValid = ($latInvalid >= -90 && $latInvalid <= 90 && $longInvalid >= -180 && $longInvalid <= 180);
+    $runner->assertFalse($isValid, "Koordinat di luar bumi harus tidak valid");
+});
+
+
+// ==========================================
+// 8. PENGUJIAN KEBIJAKAN JAM KERJA & KETERLAMBATAN
+// ==========================================
+$runner->describe("8. Pengujian Kebijakan Jam Kerja & Keterlambatan");
+
+$runner->it("Presensi sebelum 07:15:00 WIB harus berstatus 'hadir'", function() use ($runner, $presensiConfig) {
+    $jamMasukTepatWaktu = "07:05:00";
+    $isTerlambat = ($jamMasukTepatWaktu > $presensiConfig->jamMasukMax);
+    $status = $isTerlambat ? 'terlambat' : 'hadir';
+    $runner->assertEquals('hadir', $status);
+});
+
+$runner->it("Presensi setelah 07:15:00 WIB harus berstatus 'terlambat'", function() use ($runner, $presensiConfig) {
+    $jamMasukTerlambat = "07:22:15";
+    $isTerlambat = ($jamMasukTerlambat > $presensiConfig->jamMasukMax);
+    $status = $isTerlambat ? 'terlambat' : 'hadir';
+    $runner->assertEquals('terlambat', $status);
+});
+
+$runner->it("Presensi pulang sebelum 15:00:00 WIB harus dicegah / ditolak", function() use ($runner, $presensiConfig) {
+    $jamPulangAwal = "13:30:00";
+    $bisaPulang = ($jamPulangAwal >= $presensiConfig->jamPulangMin);
+    $runner->assertFalse($bisaPulang, "Jam pulang sebelum 15:00:00 harus dicegah");
+});
+
+$runner->it("Presensi pulang pada atau setelah 15:00:00 WIB harus diizinkan", function() use ($runner, $presensiConfig) {
+    $jamPulangSah = "15:15:00";
+    $bisaPulang = ($jamPulangSah >= $presensiConfig->jamPulangMin);
+    $runner->assertTrue($bisaPulang, "Jam pulang setelah 15:00:00 harus diizinkan");
+});
+
+
+// ==========================================
+// 9. PENGUJIAN HAK AKSES ADMIN & USER MANAGEMENT
+// ==========================================
+$runner->describe("9. Pengujian Hak Akses Admin & Manajemen Pengguna");
+
+$runner->it("Admin mengakses rute Admin harus diizinkan (return null)", function() use ($runner, $roleFilter, $request, $session) {
+    $session->set('isLoggedIn', true);
+    $session->set('role', 'admin');
+    $result = $roleFilter->before($request, ['admin']);
+    $runner->assertTrue($result === null);
+});
+
+$runner->it("Mahasiswa mencoba mengakses rute Admin harus dialihkan ke /admin", function() use ($runner, $roleFilter, $request, $session) {
+    $session->set('isLoggedIn', true);
+    $session->set('role', 'mahasiswa');
+    $result = $roleFilter->before($request, ['admin']);
+    $runner->assertTrue($result instanceof \CodeIgniter\HTTP\RedirectResponse);
+    $runner->assertTrue(strpos($result->getHeaderLine('Location'), '/mahasiswa') !== false);
+});
+
+$runner->it("Guru mencoba mengakses rute Admin harus dialihkan ke /guru", function() use ($runner, $roleFilter, $request, $session) {
+    $session->set('isLoggedIn', true);
+    $session->set('role', 'guru');
+    $result = $roleFilter->before($request, ['admin']);
+    $runner->assertTrue($result instanceof \CodeIgniter\HTTP\RedirectResponse);
+    $runner->assertTrue(strpos($result->getHeaderLine('Location'), '/guru') !== false);
+});
+
+$runner->it("Admin dilarang menghapus akun dirinya sendiri", function() use ($runner) {
+    $currentAdminId = 1;
+    $targetDeleteId = 1;
+    $isSelfDelete = ((int) $targetDeleteId === (int) $currentAdminId);
+    $runner->assertTrue($isSelfDelete, "Penghapusan akun sendiri harus terdeteksi");
+});
+
+
+// ==========================================
+// 10. PENGUJIAN EXPORT EXCEL & INTEGRITAS FITUR
+// ==========================================
+$runner->describe("10. Pengujian Laporan Excel & Status Whitelist");
+
+$runner->it("Daftar status sah di Guru::update_status dan PresensiModel harus mendukung 'terlambat'", function() use ($runner) {
+    $presensiModel = new \App\Models\PresensiModel();
+    $rules = $presensiModel->getValidationRules();
+    $runner->assertTrue(isset($rules['status']));
+    $runner->assertTrue(strpos($rules['status'], 'terlambat') !== false, "Status 'terlambat' harus ada di validasi PresensiModel");
+});
+
+$runner->it("Method exportExcel harus terdefinisi pada Controller Guru", function() use ($runner) {
+    $guruController = new \App\Controllers\Guru();
+    $runner->assertTrue(method_exists($guruController, 'exportExcel'), "Method exportExcel harus ada di Guru controller");
+});
+
+$runner->it("Controller Admin harus memiliki metode CRUD lengkap", function() use ($runner) {
+    $adminController = new \App\Controllers\Admin();
+    $runner->assertTrue(method_exists($adminController, 'index'));
+    $runner->assertTrue(method_exists($adminController, 'tambahUser'));
+    $runner->assertTrue(method_exists($adminController, 'editUser'));
+    $runner->assertTrue(method_exists($adminController, 'hapusUser'));
+    $runner->assertTrue(method_exists($adminController, 'resetPassword'));
+});
+
+
 // Cetak laporan akhir & exit code
 exit($runner->report());

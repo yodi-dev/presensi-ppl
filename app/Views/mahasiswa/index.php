@@ -61,6 +61,9 @@
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-3">
         <h3 class="fw-bold text-dark mb-0"><i class="bi bi-person-circle text-primary me-2"></i>Halo, <?= esc(session()->get('nama')) ?>!</h3>
         <div class="d-flex gap-2">
+            <a href="<?= base_url('mahasiswa/riwayat') ?>" class="btn btn-outline-success btn-sm rounded-pill px-3">
+                <i class="bi bi-clock-history"></i> Riwayat
+            </a>
             <a href="<?= base_url('mahasiswa/piket') ?>" class="btn btn-outline-primary btn-sm rounded-pill px-3">
                 <i class="bi bi-list-check"></i> Piket
             </a>
@@ -100,7 +103,7 @@
                         <input type="hidden" name="longitude">
                         <button type="button" id="btnPulang" class="btn btn-absen btn-pulang"
                             onclick="prosesAbsen('formPulang', 'btnPulang', 'PULANG')"
-                            <?= (!$presensi_hari_ini || $presensi_hari_ini['jam_keluar'] || $presensi_hari_ini['status'] != 'hadir') ? 'disabled' : '' ?>>
+                            <?= (!$presensi_hari_ini || $presensi_hari_ini['jam_keluar'] || !in_array($presensi_hari_ini['status'], ['hadir', 'terlambat'], true)) ? 'disabled' : '' ?>>
                             PULANG
                         </button>
                     </form>
@@ -119,20 +122,32 @@
                     <h6 class="text-muted fw-bold mb-3">Status Hari Ini</h6>
                     <?php if ($presensi_hari_ini): ?>
                         <div class="row justify-content-center">
-                            <?php if ($presensi_hari_ini['status'] === 'hadir'): ?>
+                            <?php if (in_array($presensi_hari_ini['status'], ['hadir', 'terlambat'], true)): ?>
                                 <div class="col-5">
                                     <p class="mb-0 small text-muted">Masuk</p>
-                                    <h5 class="text-success fw-bold"><?= esc($presensi_hari_ini['jam_masuk'] ?: '--:--') ?></h5>
+                                    <h5 class="<?= $presensi_hari_ini['status'] === 'terlambat' ? 'text-warning' : 'text-success' ?> fw-bold mb-1">
+                                        <?= esc($presensi_hari_ini['jam_masuk'] ?: '--:--') ?>
+                                    </h5>
+                                    <?php if ($presensi_hari_ini['status'] === 'terlambat'): ?>
+                                        <span class="badge bg-warning text-dark small">Terlambat</span>
+                                    <?php endif; ?>
                                 </div>
                                 <div class="col-2 border-end border-start"></div>
                                 <div class="col-5">
                                     <p class="mb-0 small text-muted">Pulang</p>
-                                    <h5 class="text-warning fw-bold"><?= esc($presensi_hari_ini['jam_keluar'] ?: '--:--') ?></h5>
+                                    <h5 class="text-warning fw-bold mb-1"><?= esc($presensi_hari_ini['jam_keluar'] ?: '--:--') ?></h5>
                                 </div>
                             <?php else: ?>
                                 <div class="col-12">
                                     <span class="badge bg-info fs-6 px-4 py-2 text-uppercase"><?= esc($presensi_hari_ini['status']) ?></span>
                                     <p class="small text-muted mt-2 mb-0">Keterangan: <?= esc($presensi_hari_ini['keterangan']) ?></p>
+                                    <?php if (!empty($presensi_hari_ini['bukti_surat'])): ?>
+                                        <div class="mt-2">
+                                            <a href="<?= base_url('uploads/surat/' . esc($presensi_hari_ini['bukti_surat'])) ?>" target="_blank" class="btn btn-sm btn-outline-info rounded-pill">
+                                                <i class="bi bi-file-earmark-text me-1"></i> Lihat Bukti Surat
+                                            </a>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                             <?php endif; ?>
                         </div>
@@ -155,7 +170,7 @@
                 <h5 class="modal-title fw-bold">Form Izin / Sakit</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="<?= base_url('mahasiswa/izin_sakit') ?>" method="POST">
+            <form action="<?= base_url('mahasiswa/izin_sakit') ?>" method="POST" enctype="multipart/form-data">
                 <?= csrf_field() ?>
                 <div class="modal-body text-start p-4">
                     <div class="mb-3">
@@ -166,9 +181,14 @@
                             <option value="sakit">Sakit</option>
                         </select>
                     </div>
-                    <div class="mb-2">
+                    <div class="mb-3">
                         <label class="form-label fw-semibold">Keterangan / Alasan</label>
                         <textarea name="keterangan" class="form-control" rows="3" placeholder="Contoh: Demam tinggi / Ada urusan keluarga..." required></textarea>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label fw-semibold">Bukti Surat / Dokumen <span class="text-muted fw-normal">(Opsional)</span></label>
+                        <input type="file" name="bukti_surat" class="form-control" accept=".jpg,.jpeg,.png,.webp,.pdf">
+                        <div class="form-text">Bisa dilampirkan sekarang atau menyusul melalui menu Riwayat. Maks 2MB (.jpg, .png, .pdf).</div>
                     </div>
                 </div>
                 <div class="modal-footer border-0 bg-light">

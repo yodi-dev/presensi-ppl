@@ -22,7 +22,7 @@ class RoleFilter implements FilterInterface
         // Cek apakah role user ada di dalam daftar argument yang diizinkan
         if (!empty($arguments) && !in_array($roleUser, $arguments, true)) {
             // Arahkan kembali ke dashboard sesuai role yang sah
-            $dashboard = ($roleUser === 'guru') ? '/guru' : '/mahasiswa';
+            $dashboard = ($roleUser === 'admin') ? '/admin' : (($roleUser === 'guru') ? '/guru' : '/mahasiswa');
             return redirect()->to($dashboard)->with('error', 'Akses ditolak! Anda tidak memiliki izin untuk halaman tersebut.');
         }
     }

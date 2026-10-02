@@ -129,6 +129,9 @@
             <a href="<?= base_url('guru') ?>" class="btn btn-outline-secondary rounded-pill shadow-sm px-4">
                 <i class="bi bi-arrow-left me-1"></i> Kembali
             </a>
+            <a href="<?= base_url('guru/laporan/export-excel?bulan=' . esc($bulan_pilih) . '&tahun=' . esc($tahun_pilih)) ?>" class="btn btn-success rounded-pill shadow-sm px-4">
+                <i class="bi bi-file-earmark-excel me-1"></i> Export Excel
+            </a>
             <button onclick="window.print()" class="btn btn-primary rounded-pill shadow-sm px-4">
                 <i class="bi bi-printer me-1"></i> Cetak PDF
             </button>
@@ -182,11 +185,12 @@
                     <thead>
                         <tr>
                             <th width="5%" rowspan="2" class="align-middle border-bottom-0">No</th>
-                            <th width="35%" rowspan="2" class="align-middle text-start border-bottom-0">Nama Mahasiswa</th>
-                            <th colspan="5" class="border-bottom-0 border-start text-center">Total Kehadiran</th>
+                            <th width="32%" rowspan="2" class="align-middle text-start border-bottom-0">Nama Mahasiswa</th>
+                            <th colspan="6" class="border-bottom-0 border-start text-center">Total Kehadiran</th>
                         </tr>
                         <tr>
                             <th class="border-start">Hadir</th>
+                            <th>Terlambat</th>
                             <th>Izin</th>
                             <th>Sakit</th>
                             <th>Alpa</th>
@@ -196,7 +200,7 @@
                     <tbody>
                         <?php if (empty($laporan)): ?>
                             <tr>
-                                <td colspan="7" class="text-center py-5 text-muted">
+                                <td colspan="8" class="text-center py-5 text-muted">
                                     <i class="bi bi-folder-x fs-1 d-block mb-2 text-black-50"></i>
                                     Data laporan pada bulan dan tahun ini tidak ditemukan.
                                 </td>
@@ -208,14 +212,16 @@
                                     <td class="text-start fw-bold text-dark"><?= esc($row['nama']) ?></td>
 
                                     <td class="fw-semibold text-success"><?= $row['total_hadir'] ?></td>
+                                    <td class="fw-semibold text-warning-emphasis"><?= $row['total_terlambat'] ?></td>
                                     <td class="fw-semibold text-info-emphasis"><?= $row['total_izin'] ?></td>
                                     <td class="fw-semibold text-warning-emphasis"><?= $row['total_sakit'] ?></td>
                                     <td class="fw-semibold text-danger"><?= $row['total_alpa'] ?></td>
 
                                     <td class="fw-bold bg-light">
                                         <?php
-                                        $total_masuk = $row['total_hadir'] + $row['total_izin'] + $row['total_sakit'] + $row['total_alpa'];
-                                        $persen = ($total_masuk > 0) ? ($row['total_hadir'] / $total_masuk) * 100 : 0;
+                                        $total_masuk = $row['total_hadir'] + $row['total_terlambat'] + $row['total_izin'] + $row['total_sakit'] + $row['total_alpa'];
+                                        $total_hadir_efektif = $row['total_hadir'] + $row['total_terlambat'];
+                                        $persen = ($total_masuk > 0) ? ($total_hadir_efektif / $total_masuk) * 100 : 0;
                                         echo number_format($persen, 0) . '%';
                                         ?>
                                     </td>

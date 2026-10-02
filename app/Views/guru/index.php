@@ -149,6 +149,8 @@
                                 <td>
                                     <?php if ($row['status'] === 'hadir'): ?>
                                         <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">Hadir</span>
+                                    <?php elseif ($row['status'] === 'terlambat'): ?>
+                                        <span class="badge bg-warning-subtle text-dark border border-warning px-2 py-1">Terlambat</span>
                                     <?php elseif ($row['status'] === 'izin'): ?>
                                         <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle px-2 py-1">Izin</span>
                                     <?php elseif ($row['status'] === 'sakit'): ?>
@@ -160,7 +162,7 @@
                                     <?php endif; ?>
                                 </td>
 
-                                <td><span class="fw-semibold <?= !empty($row['jam_masuk']) ? 'text-success' : 'text-muted' ?>"><?= esc($row['jam_masuk'] ?: '--:--') ?></span></td>
+                                <td><span class="fw-semibold <?= !empty($row['jam_masuk']) ? ($row['status'] === 'terlambat' ? 'text-warning' : 'text-success') : 'text-muted' ?>"><?= esc($row['jam_masuk'] ?: '--:--') ?></span></td>
                                 <td><span class="fw-semibold <?= !empty($row['jam_keluar']) ? 'text-warning' : 'text-muted' ?>"><?= esc($row['jam_keluar'] ?: '--:--') ?></span></td>
 
                                 <td class="text-start text-muted small">
@@ -168,9 +170,15 @@
                                 </td>
 
                                 <td>
-                                    <?php if ($row['status'] === 'hadir' && !empty($row['latitude']) && !empty($row['longitude'])): ?>
+                                    <?php if (in_array($row['status'], ['hadir', 'terlambat']) && !empty($row['latitude']) && !empty($row['longitude'])): ?>
                                         <a href="https://www.google.com/maps?q=<?= esc((float) $row['latitude']) ?>,<?= esc((float) $row['longitude']) ?>" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-primary rounded-pill mb-1">
                                             <i class="bi bi-geo-alt"></i> Map
+                                        </a>
+                                    <?php endif; ?>
+
+                                    <?php if (!empty($row['bukti_surat'])): ?>
+                                        <a href="<?= base_url('uploads/surat/' . esc($row['bukti_surat'])) ?>" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-info rounded-pill mb-1" title="Lihat Bukti Surat">
+                                            <i class="bi bi-file-earmark-text"></i> Bukti
                                         </a>
                                     <?php endif; ?>
 
@@ -180,6 +188,7 @@
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li><a class="dropdown-item" href="javascript:void(0)" onclick="konfirmasiUbahStatus(<?= (int) $row['id'] ?>, <?= htmlspecialchars(json_encode($row['nama']), ENT_QUOTES, 'UTF-8') ?>, 'hadir')"><i class="bi bi-check-circle text-success me-1"></i> Set Hadir</a></li>
+                                            <li><a class="dropdown-item" href="javascript:void(0)" onclick="konfirmasiUbahStatus(<?= (int) $row['id'] ?>, <?= htmlspecialchars(json_encode($row['nama']), ENT_QUOTES, 'UTF-8') ?>, 'terlambat')"><i class="bi bi-clock-history text-warning me-1"></i> Set Terlambat</a></li>
                                             <li><a class="dropdown-item" href="javascript:void(0)" onclick="konfirmasiUbahStatus(<?= (int) $row['id'] ?>, <?= htmlspecialchars(json_encode($row['nama']), ENT_QUOTES, 'UTF-8') ?>, 'izin')"><i class="bi bi-info-circle text-info me-1"></i> Set Izin</a></li>
                                             <li><a class="dropdown-item" href="javascript:void(0)" onclick="konfirmasiUbahStatus(<?= (int) $row['id'] ?>, <?= htmlspecialchars(json_encode($row['nama']), ENT_QUOTES, 'UTF-8') ?>, 'sakit')"><i class="bi bi-exclamation-triangle text-warning me-1"></i> Set Sakit</a></li>
                                             <li><hr class="dropdown-divider"></li>
@@ -211,6 +220,7 @@
     function konfirmasiUbahStatus(userId, namaMahasiswa, statusBaru) {
         const badgeColors = {
             'hadir': '#198754',
+            'terlambat': '#ffc107',
             'izin': '#0dcaf0',
             'sakit': '#ffc107',
             'alpa': '#dc3545'

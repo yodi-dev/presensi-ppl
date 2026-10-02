@@ -20,12 +20,13 @@ class PresensiModel extends Model
         // 'long_masuk',    // (kalau kamu pakai opsi 4 kolom lokasi)
         // 'lat_keluar',    // (kalau kamu pakai opsi 4 kolom lokasi)
         // 'long_keluar',   // (kalau kamu pakai opsi 4 kolom lokasi)
-        'status',        // TAMBAHKAN INI
-        'keterangan'     // TAMBAHKAN INI
+        'status',
+        'keterangan',
+        'bukti_surat'
     ];
 
     protected $validationRules = [
-        'status' => 'required|in_list[hadir,izin,sakit,alpa]'
+        'status' => 'required|in_list[hadir,terlambat,izin,sakit,alpa]'
     ];
 
     public function getPresensiLengkap()
