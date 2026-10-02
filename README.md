@@ -1,61 +1,155 @@
-# CodeIgniter 4 Framework
+# Presensi PPL
 
-## What is CodeIgniter?
+Sistem informasi presensi digital dan dokumentasi piket KBM (Kegiatan Belajar Mengajar) untuk mahasiswa Praktik Pengalaman Lapangan (PPL) berbasis web menggunakan CodeIgniter 4.
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+---
 
-This repository holds the distributable version of the framework.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+## Tentang Aplikasi
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+Aplikasi ini dikembangkan untuk memudahkan pemantauan kehadiran serta kegiatan mahasiswa PPL secara transparan dan akurat. Sistem ini memisahkan hak akses antara Guru Pamong/Pembimbing dan Mahasiswa PPL, dilengkapi pelacakan koordinat lokasi saat absen serta dokumentasi piket berbasis kamera langsung dengan watermark waktu.
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+---
 
-## Important Change with index.php
+## Fitur Utama
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+### Mahasiswa PPL
+* **Presensi Datang & Pulang**: Pencatatan waktu masuk dan keluar otomatis dilengkapi pengambilan titik koordinat GPS (latitude & longitude).
+* **Pengajuan Izin & Sakit**: Formulir pengajuan keterangan ketidakhadiran dengan alasan yang tercatat di sistem.
+* **Presensi Piket KBM**: Dokumentasi kehadiran piket menggunakan kamera perangkat secara langsung, dilengkapi watermark waktu dan nama mahasiswa pada foto bukti.
+* **Ganti Password**: Pengelolaan keamanan akun mandiri.
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+### Guru Pamong / Pembimbing
+* **Dashboard Rekap Harian**: Pemantauan kehadiran seluruh mahasiswa per tanggal dengan filter jurusan (Informatika, PJOK, BK, TL, TO).
+* **Verifikasi Titik Lokasi**: Tautan langsung ke Google Maps berdasarkan koordinat GPS saat mahasiswa melakukan absensi datang.
+* **Pembaruan Status Presensi**: Fasilitas perubahan status kehadiran (Hadir, Izin, Sakit, Alpa) yang dilengkapi konfirmasi SweetAlert dan proteksi token CSRF.
+* **Laporan Bulanan**: Rekapitulasi akumulasi kehadiran bulanan per mahasiswa lengkap dengan persentase kehadiran serta tampilan cetak ramah cetak (print-ready layout).
+* **Laporan Piket KBM**: Rekapitulasi dokumentasi kegiatan piket harian beserta penampil bukti foto.
 
-**Please** read the user guide for a better explanation of how CI4 works!
+### Keamanan Sistem
+* **Autentikasi & Otorisasi Rute**: Penggunaan `AuthFilter` dan `RoleFilter` berbasis middleware untuk membatasi akses URL berdasarkan peran pengguna.
+* **Proteksi File Upload**: Validasi MIME type, verifikasi binary gambar, whitelist ekstensi, dan pembatasan eksekusi skrip PHP di folder upload via `.htaccess`.
+* **Proteksi SQL Injection & XSS**: Penggunaan parameterized query/escaping pada seluruh filter dan sanitasi output tampilan menggunakan `esc()`.
+* **Proteksi CSRF**: Penerapan token CSRF pada seluruh permintaan POST.
 
-## Repository Management
+---
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+## Teknologi yang Digunakan
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+* **Backend**: PHP 8.2+ / CodeIgniter 4
+* **Database**: MySQL
+* **Frontend**: Bootstrap 5.3, Bootstrap Icons, SweetAlert2
+* **Web API Browser**: HTML5 Geolocation API, HTML5 Canvas API, MediaDevices Camera API
 
-## Contributing
+---
 
-We welcome contributions from the community.
+## Persyaratan Sistem
 
-Please read the [*Contributing to CodeIgniter*](https://github.com/codeigniter4/CodeIgniter4/blob/develop/CONTRIBUTING.md) section in the development repository.
+* PHP versi 8.2 atau lebih tinggi
+* Ekstensi PHP: `intl`, `mbstring`, `json`, `mysqli`, `fileinfo`
+* Web Server (Apache via Laragon / XAMPP)
+* MySQL Database Server
 
-## Server Requirements
+---
 
-PHP version 8.2 or higher is required, with the following extensions installed:
+## Panduan Instalasi Lokal
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+### 1. Clone Repositori
+```bash
+git clone https://github.com/yodi-dev/presensi-ppl.git
+cd presensi-ppl
+```
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - The end of life date for PHP 8.1 was December 31, 2025.
-> - If you are still using below PHP 8.2, you should upgrade immediately.
-> - The end of life date for PHP 8.2 will be December 31, 2026.
+### 2. Konfigurasi Environment
+Salin file konfigurasi contoh `.env.example` menjadi `.env`:
+```bash
+copy .env.example .env
+```
+Sesuaikan pengaturan database dan URL dasar aplikasi pada file `.env`:
+```ini
+CI_ENVIRONMENT = development
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+app.baseURL = 'http://localhost:8080/'
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+database.default.hostname = localhost
+database.default.database = db_presensi
+database.default.username = root
+database.default.password = 
+database.default.DBDriver = MySQLi
+```
+
+### 3. Setup Database
+1. Buat database baru di MySQL dengan nama `db_presensi`.
+2. Pastikan tabel `users`, `presensi`, dan `piket_kbm` telah diimpor ke database.
+3. Jalankan Seeder akun bawaan jika diperlukan:
+```bash
+php spark db:seed UserSeeder
+```
+
+### 4. Menjalankan Aplikasi
+Jalankan server pengembangan bawaan CodeIgniter:
+```bash
+php spark serve
+```
+Buka browser dan akses alamat: `http://localhost:8080` (atau via virtual host Laragon).
+
+---
+
+## Akun Default Pengujian
+
+| Peran | Username | Password Default | Keterangan |
+| :--- | :--- | :--- | :--- |
+| **Guru** | `febriyana` | `secret` | Akun Pembimbing |
+| **Guru** | `jumari` | `secret` | Akun Pembimbing |
+| **Mahasiswa** | `awan` | `secret12` | Mahasiswa Informatika |
+| **Mahasiswa** | `fajar` | `secret` | Mahasiswa Informatika |
+| **Mahasiswa** | `latifah` | `secret` | Mahasiswa BK |
+
+---
+
+## Pengujian Otomatis
+
+Aplikasi dilengkapi dengan test suite mandiri untuk memverifikasi keamanan dan fungsionalitas sistem.
+
+Jalankan pengujian melalui terminal:
+```bash
+php tests/runner.php
+```
+
+Pengujian mencakup:
+1. Verifikasi penolakan akses tamu pada rute terproteksi (`AuthFilter`).
+2. Verifikasi pemisahan hak akses Guru dan Mahasiswa (`RoleFilter`).
+3. Pengujian keamanan upload bukti piket (validasi binary, ekstensi, dan `.htaccess`).
+4. Pengujian netralisasi injeksi SQL pada parameter tanggal dan bulan/tahun.
+5. Pengujian sanitasi output terhadap potensi XSS.
+6. Verifikasi ketiadaan kredensial sensitif pada repositori.
+
+---
+
+## Struktur Direktori Utama
+
+```
+presensi-ppl/
+├── app/
+│   ├── Config/          # Konfigurasi aplikasi, filter, dan routing
+│   ├── Controllers/     # Controller Auth, Guru, dan Mahasiswa
+│   ├── Database/        # Seeder dan migrasi database
+│   ├── Filters/         # Filter middleware AuthFilter & RoleFilter
+│   ├── Models/          # Model data UserModel, PresensiModel, PiketModel
+│   └── Views/           # Template antarmuka (auth, guru, mahasiswa, layout)
+├── public/
+│   ├── uploads/         # Direktori upload foto bukti (dilindungi .htaccess)
+│   ├── favicon.png      # Ikon favicon web
+│   └── index.php        # Front controller aplikasi
+├── tests/
+│   ├── runner.php       # Test runner otomatis mandiri
+│   └── unit/            # Unit testing standar
+├── .env.example         # Template konfigurasi environment bersih
+├── .gitignore           # Konfigurasi pengabaian file sensitif
+└── README.md            # Dokumentasi proyek
+```
+
+---
+
+## Lisensi
+
+Proyek ini dikembangkan untuk kebutuhan internal institusi dan praktik mahasiswa PPL.
