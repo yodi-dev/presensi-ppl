@@ -2,16 +2,13 @@
 
 namespace App\Controllers;
 
+use App\Models\PiketModel;
 use App\Models\PresensiModel;
 
 class Mahasiswa extends BaseController
 {
     public function index()
     {
-        if (session()->get('role') != 'mahasiswa') {
-            return redirect()->to('/auth');
-        }
-
         $presensiModel = new PresensiModel();
         $userId = session()->get('id_user');
         $tanggalHariIni = date('Y-m-d');
@@ -21,7 +18,8 @@ class Mahasiswa extends BaseController
             ->first();
 
         $data = [
-            'presensi_hari_ini' => $presensiHariIni
+            'presensi_hari_ini' => $presensiHariIni,
+            'title'             => 'Dashboard Mahasiswa - Presensi PPL'
         ];
 
         return view('mahasiswa/index', $data);
@@ -36,14 +34,20 @@ class Mahasiswa extends BaseController
         $cek = $presensiModel->where('user_id', $userId)->where('tanggal', $tanggalHariIni)->first();
 
         if (!$cek) {
+            $lat = $this->request->getPost('latitude');
+            $long = $this->request->getPost('longitude');
+
+            // Validasi format angka koordinat
+            $latitudeValid = is_numeric($lat) && $lat >= -90 && $lat <= 90 ? (float) $lat : null;
+            $longitudeValid = is_numeric($long) && $long >= -180 && $long <= 180 ? (float) $long : null;
+
             $presensiModel->insert([
                 'user_id'   => $userId,
                 'tanggal'   => $tanggalHariIni,
                 'jam_masuk' => date('H:i:s'),
-                'status' => 'hadir',
-                // Data ini sekarang pasti masuk karena view-nya udah bener
-                'latitude'  => $this->request->getPost('latitude'),
-                'longitude' => $this->request->getPost('longitude')
+                'status'    => 'hadir',
+                'latitude'  => $latitudeValid,
+                'longitude' => $longitudeValid
             ]);
             session()->setFlashdata('pesan', 'Berhasil absen datang! Semangat belajarnya.');
         } else {
@@ -61,16 +65,12 @@ class Mahasiswa extends BaseController
 
         $cek = $presensiModel->where('user_id', $userId)->where('tanggal', $tanggalHariIni)->first();
 
-        if ($cek && empty($cek['jam_keluar']) && $cek['status'] == 'hadir') {
-
+        if ($cek && empty($cek['jam_keluar']) && $cek['status'] === 'hadir') {
             $presensiModel->update($cek['id'], [
-                'jam_keluar' => date('H:i:s'),
-                // 'lat_keluar'  => $this->request->getPost('latitude'),
-                // 'long_keluar' => $this->request->getPost('longitude')
+                'jam_keluar' => date('H:i:s')
             ]);
             session()->setFlashdata('pesan', 'Berhasil absen pulang! Hati-hati di jalan.');
         } else {
-            // Ubah pesan errornya biar lebih jelas
             session()->setFlashdata('error', 'Tidak bisa absen pulang (belum datang, sudah pulang, atau status izin/sakit).');
         }
 
@@ -79,21 +79,35 @@ class Mahasiswa extends BaseController
 
     public function izin_sakit()
     {
-        // dd($_POST);
         $presensiModel = new PresensiModel();
         $userId = session()->get('id_user');
         $tanggalHariIni = date('Y-m-d');
 
-        // Cek dulu, jangan sampai double input
         $cek = $presensiModel->where('user_id', $userId)->where('tanggal', $tanggalHariIni)->first();
 
         if (!$cek) {
+            $status = $this->request->getPost('status');
+            $keterangan = trim(strip_tags((string) $this->request->getPost('keterangan')));
+
+            if (!in_array($status, ['izin', 'sakit'], true)) {
+                return redirect()->to('/mahasiswa')->with('error', 'Pilihan status tidak valid!');
+            }
+
+            if (empty($keterangan)) {
+                return redirect()->to('/mahasiswa')->with('error', 'Alasan keterangan wajib diisi!');
+            }
+
+            // Batasi panjang keterangan
+            if (mb_strlen($keterangan) > 500) {
+                $keterangan = mb_substr($keterangan, 0, 500);
+            }
+
             $presensiModel->insert([
                 'user_id'    => $userId,
                 'tanggal'    => $tanggalHariIni,
-                'status'     => $this->request->getPost('status'), // 'izin' atau 'sakit'
-                'keterangan' => $this->request->getPost('keterangan'),
-                'jam_masuk'  => date('H:i:s'), // Tetap catat waktu dia lapor
+                'status'     => $status,
+                'keterangan' => $keterangan,
+                'jam_masuk'  => date('H:i:s'),
             ]);
             session()->setFlashdata('pesan', 'Keterangan izin/sakit berhasil dikirim.');
         } else {
@@ -105,18 +119,17 @@ class Mahasiswa extends BaseController
 
     public function piket()
     {
-        $piketModel = new \App\Models\PiketModel();
+        $piketModel = new PiketModel();
         $userId = session()->get('id_user');
         $today = date('Y-m-d');
 
-        // Cari data piket user ini untuk hari ini
         $sudahPiket = $piketModel->where('user_id', $userId)
             ->where('tanggal', $today)
             ->first();
 
         $data = [
             'title'      => 'Presensi Piket KBM',
-            'sudahPiket' => !empty($sudahPiket), // Akan bernilai true jika data ada
+            'sudahPiket' => !empty($sudahPiket),
             'dataPiket'  => $sudahPiket
         ];
 
@@ -125,47 +138,87 @@ class Mahasiswa extends BaseController
 
     public function simpanPiket()
     {
+        $userId = session()->get('id_user');
+        $piketModel = new PiketModel();
+        $today = date('Y-m-d');
+
+        // Pastikan tidak dobel submit piket di hari yang sama
+        $sudahPiket = $piketModel->where('user_id', $userId)
+            ->where('tanggal', $today)
+            ->first();
+
+        if ($sudahPiket) {
+            return redirect()->to('mahasiswa/piket')->with('error', 'Kamu sudah melakukan presensi piket hari ini!');
+        }
+
         // 1. Ambil data Base64 dari form
-        $base64_string = $this->request->getPost('foto_base64');
+        $base64_string = (string) $this->request->getPost('foto_base64');
 
         if (empty($base64_string)) {
             return redirect()->back()->with('error', 'Foto bukti tidak boleh kosong!');
         }
 
-        // 2. Pisahkan header "data:image/jpeg;base64," dari data inti fotonya
-        $image_parts = explode(";base64,", $base64_string);
-        $image_type_aux = explode("image/", $image_parts[0]);
-        $image_type = $image_type_aux[1] ?? 'jpeg'; // Default ke jpeg
-        $image_base64 = base64_decode($image_parts[1]);
+        // 2. Validasi struktur Header Data URL Base64 dan whitelist MIME
+        $allowedMimes = [
+            'image/jpeg' => 'jpg',
+            'image/jpg'  => 'jpg',
+            'image/png'  => 'png',
+            'image/webp' => 'webp'
+        ];
 
-        // 3. Buat nama file unik (Format: piket_idUser_timestamp.jpeg)
-        $userId = session()->get('id_user'); // Pastikan ini sesuai dengan nama session id user kamu
-        $fileName = 'piket_' . $userId . '_' . time() . '.' . $image_type;
-
-        // 4. Tentukan lokasi folder penyimpanan (public/uploads/piket/)
-        $path = FCPATH . 'uploads/piket/';
-
-        // Bikin foldernya otomatis kalau belum ada
-        if (!is_dir($path)) {
-            mkdir($path, 0777, true);
+        if (!preg_match('/^data:(image\/(jpeg|jpg|png|webp));base64,(.+)$/i', $base64_string, $matches)) {
+            return redirect()->back()->with('error', 'Format data gambar tidak valid atau tidak didukung!');
         }
 
-        // 5. Simpan file gambar ke dalam folder tersebut
-        file_put_contents($path . $fileName, $image_base64);
+        $detectedMime = strtolower($matches[1]);
+        if (!isset($allowedMimes[$detectedMime])) {
+            return redirect()->back()->with('error', 'Tipe file tidak diizinkan. Hanya foto JPG, PNG, atau WEBP!');
+        }
 
-        // 6. Simpan data presensi ke Database
-        $piketModel = new \App\Models\PiketModel();
+        $rawBase64 = $matches[3];
+        $image_binary = base64_decode($rawBase64, true);
 
+        if ($image_binary === false) {
+            return redirect()->back()->with('error', 'Gagal memproses data gambar!');
+        }
+
+        // 3. Batasi ukuran file (Maksimal 5MB)
+        if (strlen($image_binary) > 5 * 1024 * 1024) {
+            return redirect()->back()->with('error', 'Ukuran gambar terlalu besar (maksimal 5MB)!');
+        }
+
+        // 4. Verifikasi binary data benar-benar merupakan gambar valid (bukan script menyamar)
+        $imageInfo = @getimagesizefromstring($image_binary);
+        if ($imageInfo === false || empty($imageInfo['mime']) || !isset($allowedMimes[$imageInfo['mime']])) {
+            return redirect()->back()->with('error', 'File yang dikirimkan terdeteksi bukan gambar asli!');
+        }
+
+        // 5. Buat nama file unik dan aman: piket_{userId}_{timestamp}_{random}.{ext}
+        $extension = $allowedMimes[$imageInfo['mime']];
+        $randomHash = bin2hex(random_bytes(4));
+        $fileName = 'piket_' . (int) $userId . '_' . time() . '_' . $randomHash . '.' . $extension;
+
+        // 6. Tentukan folder penyimpanan yang aman
+        $path = FCPATH . 'uploads/piket/';
+        if (!is_dir($path)) {
+            mkdir($path, 0755, true);
+        }
+
+        // Simpan file
+        if (file_put_contents($path . $fileName, $image_binary) === false) {
+            return redirect()->back()->with('error', 'Gagal menyimpan foto bukti di server.');
+        }
+
+        // 7. Simpan data presensi ke Database
         $dataPiket = [
-            'user_id'    => $userId,
-            'tanggal'    => date('Y-m-d'),
+            'user_id'    => (int) $userId,
+            'tanggal'    => $today,
             'waktu'      => date('H:i:s'),
-            'foto_bukti' => $fileName // Kita cuma simpan nama filenya aja, bukan full gambarnya
+            'foto_bukti' => $fileName
         ];
 
         $piketModel->insert($dataPiket);
 
-        // 7. Redirect kembali dengan pesan sukses
         return redirect()->to('mahasiswa/piket')->with('success', 'Presensi Piket KBM berhasil disimpan!');
     }
 }

@@ -1,0 +1,24 @@
+# Proteksi Keamanan Folder Uploads
+
+# Blokir eksekusi semua script executable (PHP, CGI, dll)
+
+<FilesMatch "(?i)\.(php|phtml|php3|php4|php5|php7|phps|pht|phar|inc|cgi|pl|py|sh|bash)$">
+Order Deny,Allow
+Deny from all
+</FilesMatch>
+
+# Matikan PHP engine jika berjalan sebagai modul Apache
+
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_php7.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_php8.c>
+    php_flag engine off
+</IfModule>
+
+# Cegah directory listing
+
+Options -Indexes -ExecCGI

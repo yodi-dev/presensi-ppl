@@ -22,7 +22,7 @@ class PiketModel extends Model
     // Fungsi tambahan untuk ngambil data piket sekalian sama nama & jurusan mahasiswanya
     public function getPiketWithUser()
     {
-        return $this->select('piket_kbm.*, users.nama, users.jurusan')
+        return $this->select('piket_kbm.id as id, piket_kbm.user_id, piket_kbm.tanggal, piket_kbm.waktu, piket_kbm.foto_bukti, users.nama, users.jurusan')
             ->join('users', 'users.id = piket_kbm.user_id')
             ->orderBy('piket_kbm.tanggal', 'DESC')
             ->orderBy('piket_kbm.waktu', 'DESC')
@@ -31,14 +31,15 @@ class PiketModel extends Model
 
     public function getPiketWithFilter($tanggal)
     {
-        $builder = $this->select('piket_kbm.*, users.id, users.nama, users.jurusan');
+        $tanggalPilih = (is_string($tanggal) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $tanggal))
+            ? $tanggal
+            : date('Y-m-d');
 
-        // 2. JOIN dengan tabel presensi berdasarkan tanggal yang dipilih
-        $builder->join('users', "users.id = piket_kbm.user_id AND piket_kbm.tanggal = '$tanggal'", 'left');
-
-        // 3. Filter dasar: Hanya role mahasiswa
-        $builder->where('users.role', 'mahasiswa');
-
-        return $builder->findAll();
+        return $this->select('piket_kbm.id as id, piket_kbm.user_id, piket_kbm.tanggal, piket_kbm.waktu, piket_kbm.foto_bukti, users.nama, users.jurusan')
+            ->join('users', 'users.id = piket_kbm.user_id')
+            ->where('users.role', 'mahasiswa')
+            ->where('piket_kbm.tanggal', $tanggalPilih)
+            ->orderBy('piket_kbm.waktu', 'DESC')
+            ->findAll();
     }
 }

@@ -52,7 +52,7 @@
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
         <div>
             <h3 class="fw-bold text-dark mb-0"><i class="bi bi-person-workspace text-primary me-2"></i>Dashboard Guru</h3>
-            <p class="text-muted mt-1 mb-0">Selamat datang, <strong><?= session()->get('nama') ?></strong></p>
+            <p class="text-muted mt-1 mb-0">Selamat datang, <strong><?= esc(session()->get('nama')) ?></strong></p>
         </div>
         <div class="d-flex flex-wrap gap-2">
             <div class="dropdown d-inline-block">
@@ -88,7 +88,7 @@
             <div>
                 <h5 class="mb-1 fw-bold text-dark">Rekap Presensi Harian</h5>
                 <p class="text-muted small mb-0">
-                    Menampilkan data untuk tanggal: <span class="fw-bold text-primary"><?= date('d F Y', strtotime($tanggal)) ?></span>
+                    Menampilkan data untuk tanggal: <span class="fw-bold text-primary"><?= esc(date('d F Y', strtotime($tanggal))) ?></span>
                 </p>
             </div>
 
@@ -99,17 +99,17 @@
                         <label for="jurusan" class="fw-bold text-muted small mb-0 text-nowrap"><i class="bi bi-funnel"></i> Jurusan:</label>
                         <select name="jurusan" id="jurusan" class="form-select form-select-sm border-0 shadow-sm" onchange="this.form.submit()">
                             <option value="">-- Semua Jurusan --</option>
-                            <option value="Informatika" <?= ($jurusan_terpilih == 'Informatika') ? 'selected' : '' ?>>Informatika</option>
-                            <option value="PJOK" <?= ($jurusan_terpilih == 'PJOK') ? 'selected' : '' ?>>PJOK</option>
-                            <option value="BK" <?= ($jurusan_terpilih == 'BK') ? 'selected' : '' ?>>BK</option>
-                            <option value="TL" <?= ($jurusan_terpilih == 'TL') ? 'selected' : '' ?>>TL</option>
-                            <option value="TO" <?= ($jurusan_terpilih == 'TO') ? 'selected' : '' ?>>TO</option>
+                            <option value="Informatika" <?= ($jurusan_terpilih === 'Informatika') ? 'selected' : '' ?>>Informatika</option>
+                            <option value="PJOK" <?= ($jurusan_terpilih === 'PJOK') ? 'selected' : '' ?>>PJOK</option>
+                            <option value="BK" <?= ($jurusan_terpilih === 'BK') ? 'selected' : '' ?>>BK</option>
+                            <option value="TL" <?= ($jurusan_terpilih === 'TL') ? 'selected' : '' ?>>TL</option>
+                            <option value="TO" <?= ($jurusan_terpilih === 'TO') ? 'selected' : '' ?>>TO</option>
                         </select>
                     </div>
 
                     <div class="filter-wrapper d-flex align-items-center gap-2">
                         <label for="tanggal" class="fw-bold text-muted small mb-0 text-nowrap"><i class="bi bi-calendar-event me-1"></i>Tanggal:</label>
-                        <input type="date" id="tanggal" name="tanggal" class="form-control form-control-sm border-0 shadow-sm" style="width: auto;" value="<?= $tanggal ?>" required>
+                        <input type="date" id="tanggal" name="tanggal" class="form-control form-control-sm border-0 shadow-sm" style="width: auto;" value="<?= esc($tanggal) ?>" required>
 
                         <button type="submit" class="btn btn-sm btn-primary shadow-sm"><i class="bi bi-search"></i> Cari</button>
                         <a href="<?= base_url('guru') ?>" class="btn btn-sm btn-light border shadow-sm" title="Reset ke hari ini"><i class="bi bi-arrow-clockwise"></i></a>
@@ -143,46 +143,47 @@
                     <?php else: ?>
                         <?php foreach ($presensi as $key => $row): ?>
                             <tr>
-                                <td><span class="text-muted fw-semibold"><?= $key + 1 ?></span></td>
-                                <td class="text-start fw-bold text-dark"><?= $row['nama'] ?></td>
+                                <td><span class="text-muted fw-semibold"><?= esc($key + 1) ?></span></td>
+                                <td class="text-start fw-bold text-dark"><?= esc($row['nama']) ?></td>
 
                                 <td>
-                                    <?php if ($row['status'] == 'hadir'): ?>
+                                    <?php if ($row['status'] === 'hadir'): ?>
                                         <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">Hadir</span>
-                                    <?php elseif ($row['status'] == 'izin'): ?>
+                                    <?php elseif ($row['status'] === 'izin'): ?>
                                         <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle px-2 py-1">Izin</span>
-                                    <?php elseif ($row['status'] == 'sakit'): ?>
+                                    <?php elseif ($row['status'] === 'sakit'): ?>
                                         <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-2 py-1">Sakit</span>
-                                    <?php elseif ($row['status'] == 'alpa'): ?>
+                                    <?php elseif ($row['status'] === 'alpa'): ?>
                                         <span class="badge bg-danger-subtle text-danger-emphasis border border-danger-subtle px-2 py-1">Alpa</span>
                                     <?php else: ?>
                                         <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2 py-1">Belum Absen</span>
                                     <?php endif; ?>
                                 </td>
 
-                                <td><span class="fw-semibold <?= $row['jam_masuk'] ? 'text-success' : 'text-muted' ?>"><?= $row['jam_masuk'] ? $row['jam_masuk'] : '--:--' ?></span></td>
-                                <td><span class="fw-semibold <?= $row['jam_keluar'] ? 'text-warning' : 'text-muted' ?>"><?= $row['jam_keluar'] ? $row['jam_keluar'] : '--:--' ?></span></td>
+                                <td><span class="fw-semibold <?= !empty($row['jam_masuk']) ? 'text-success' : 'text-muted' ?>"><?= esc($row['jam_masuk'] ?: '--:--') ?></span></td>
+                                <td><span class="fw-semibold <?= !empty($row['jam_keluar']) ? 'text-warning' : 'text-muted' ?>"><?= esc($row['jam_keluar'] ?: '--:--') ?></span></td>
 
                                 <td class="text-start text-muted small">
-                                    <?= $row['keterangan'] ? $row['keterangan'] : '<span class="text-black-50 fst-italic">Tidak ada keterangan</span>' ?>
+                                    <?= !empty($row['keterangan']) ? esc($row['keterangan']) : '<span class="text-black-50 fst-italic">Tidak ada keterangan</span>' ?>
                                 </td>
 
                                 <td>
-                                    <?php if ($row['status'] == 'hadir' && $row['latitude']): ?>
-                                        <a href="https://www.google.com/maps?q=<?= $row['latitude'] ?>,<?= $row['longitude'] ?>" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill mb-1">
+                                    <?php if ($row['status'] === 'hadir' && !empty($row['latitude']) && !empty($row['longitude'])): ?>
+                                        <a href="https://www.google.com/maps?q=<?= esc((float) $row['latitude']) ?>,<?= esc((float) $row['longitude']) ?>" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-primary rounded-pill mb-1">
                                             <i class="bi bi-geo-alt"></i> Map
                                         </a>
                                     <?php endif; ?>
 
                                     <div class="dropdown d-inline">
-                                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown">
+                                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="bi bi-pencil-square"></i> Status
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="<?= base_url('guru/update_status/' . $row['id'] . '/hadir?tgl=' . $tanggal) ?>">Set Hadir</a></li>
-                                            <li><a class="dropdown-item" href="<?= base_url('guru/update_status/' . $row['id'] . '/izin?tgl=' . $tanggal) ?>">Set Izin</a></li>
-                                            <li><a class="dropdown-item" href="<?= base_url('guru/update_status/' . $row['id'] . '/sakit?tgl=' . $tanggal) ?>">Set Sakit</a></li>
-                                            <li><a class="dropdown-item text-danger" href="<?= base_url('guru/update_status/' . $row['id'] . '/alpa?tgl=' . $tanggal) ?>">Set Alpa</a></li>
+                                            <li><a class="dropdown-item" href="javascript:void(0)" onclick="konfirmasiUbahStatus(<?= (int) $row['id'] ?>, <?= htmlspecialchars(json_encode($row['nama']), ENT_QUOTES, 'UTF-8') ?>, 'hadir')"><i class="bi bi-check-circle text-success me-1"></i> Set Hadir</a></li>
+                                            <li><a class="dropdown-item" href="javascript:void(0)" onclick="konfirmasiUbahStatus(<?= (int) $row['id'] ?>, <?= htmlspecialchars(json_encode($row['nama']), ENT_QUOTES, 'UTF-8') ?>, 'izin')"><i class="bi bi-info-circle text-info me-1"></i> Set Izin</a></li>
+                                            <li><a class="dropdown-item" href="javascript:void(0)" onclick="konfirmasiUbahStatus(<?= (int) $row['id'] ?>, <?= htmlspecialchars(json_encode($row['nama']), ENT_QUOTES, 'UTF-8') ?>, 'sakit')"><i class="bi bi-exclamation-triangle text-warning me-1"></i> Set Sakit</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item text-danger" href="javascript:void(0)" onclick="konfirmasiUbahStatus(<?= (int) $row['id'] ?>, <?= htmlspecialchars(json_encode($row['nama']), ENT_QUOTES, 'UTF-8') ?>, 'alpa')"><i class="bi bi-x-circle text-danger me-1"></i> Set Alpa</a></li>
                                         </ul>
                                     </div>
                                 </td>
@@ -195,4 +196,42 @@
     </div>
 
 </div>
+
+<!-- Form Tersembunyi untuk Update Status via POST + CSRF -->
+<form id="formUpdateStatus" action="<?= base_url('guru/update-status') ?>" method="POST" style="display: none;">
+    <?= csrf_field() ?>
+    <input type="hidden" name="user_id" id="statusUserId">
+    <input type="hidden" name="status" id="statusPilihan">
+    <input type="hidden" name="tanggal" value="<?= esc($tanggal) ?>">
+</form>
+<?= $this->endSection() ?>
+
+<?= $this->section('scripts') ?>
+<script>
+    function konfirmasiUbahStatus(userId, namaMahasiswa, statusBaru) {
+        const badgeColors = {
+            'hadir': '#198754',
+            'izin': '#0dcaf0',
+            'sakit': '#ffc107',
+            'alpa': '#dc3545'
+        };
+
+        Swal.fire({
+            title: 'Ubah Status Presensi?',
+            html: `Ubah kehadiran <strong>${namaMahasiswa}</strong> menjadi <span style="color: ${badgeColors[statusBaru] || '#003366'}; font-weight: bold;">${statusBaru.toUpperCase()}</span>?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#003366',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Ya, Ubah!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('statusUserId').value = userId;
+                document.getElementById('statusPilihan').value = statusBaru;
+                document.getElementById('formUpdateStatus').submit();
+            }
+        });
+    }
+</script>
 <?= $this->endSection() ?>

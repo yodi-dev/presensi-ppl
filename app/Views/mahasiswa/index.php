@@ -59,7 +59,7 @@
 <div class="container mt-4 mb-5">
 
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-3">
-        <h3 class="fw-bold text-dark mb-0"><i class="bi bi-person-circle text-primary me-2"></i>Halo, <?= session()->get('nama') ?>!</h3>
+        <h3 class="fw-bold text-dark mb-0"><i class="bi bi-person-circle text-primary me-2"></i>Halo, <?= esc(session()->get('nama')) ?>!</h3>
         <div class="d-flex gap-2">
             <a href="<?= base_url('mahasiswa/piket') ?>" class="btn btn-outline-primary btn-sm rounded-pill px-3">
                 <i class="bi bi-list-check"></i> Piket
@@ -119,20 +119,20 @@
                     <h6 class="text-muted fw-bold mb-3">Status Hari Ini</h6>
                     <?php if ($presensi_hari_ini): ?>
                         <div class="row justify-content-center">
-                            <?php if ($presensi_hari_ini['status'] == 'hadir'): ?>
+                            <?php if ($presensi_hari_ini['status'] === 'hadir'): ?>
                                 <div class="col-5">
                                     <p class="mb-0 small text-muted">Masuk</p>
-                                    <h5 class="text-success fw-bold"><?= $presensi_hari_ini['jam_masuk'] ?: '--:--' ?></h5>
+                                    <h5 class="text-success fw-bold"><?= esc($presensi_hari_ini['jam_masuk'] ?: '--:--') ?></h5>
                                 </div>
                                 <div class="col-2 border-end border-start"></div>
                                 <div class="col-5">
                                     <p class="mb-0 small text-muted">Pulang</p>
-                                    <h5 class="text-warning fw-bold"><?= $presensi_hari_ini['jam_keluar'] ?: '--:--' ?></h5>
+                                    <h5 class="text-warning fw-bold"><?= esc($presensi_hari_ini['jam_keluar'] ?: '--:--') ?></h5>
                                 </div>
                             <?php else: ?>
                                 <div class="col-12">
-                                    <span class="badge bg-info fs-6 px-4 py-2 text-uppercase"><?= $presensi_hari_ini['status'] ?></span>
-                                    <p class="small text-muted mt-2 mb-0">Keterangan: <?= $presensi_hari_ini['keterangan'] ?></p>
+                                    <span class="badge bg-info fs-6 px-4 py-2 text-uppercase"><?= esc($presensi_hari_ini['status']) ?></span>
+                                    <p class="small text-muted mt-2 mb-0">Keterangan: <?= esc($presensi_hari_ini['keterangan']) ?></p>
                                 </div>
                             <?php endif; ?>
                         </div>

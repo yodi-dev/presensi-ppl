@@ -25,8 +25,8 @@
 
                             <hr>
                             <div class="text-start small bg-light p-3 rounded-3 mb-4">
-                                <div><strong>Waktu:</strong> <?= $dataPiket['waktu'] ?></div>
-                                <div><strong>Tanggal:</strong> <?= $dataPiket['tanggal'] ?></div>
+                                <div><strong>Waktu:</strong> <?= esc($dataPiket['waktu']) ?></div>
+                                <div><strong>Tanggal:</strong> <?= esc($dataPiket['tanggal']) ?></div>
                             </div>
 
                             <a href="<?= base_url('mahasiswa') ?>" class="btn btn-primary btn-lg w-100 rounded-pill">
@@ -59,7 +59,7 @@
                             </button>
                         </form>
 
-                        <a href="<?= base_url('mahasiswa/dashboard') ?>" class="btn btn-link text-decoration-none mt-3">
+                        <a href="<?= base_url('mahasiswa') ?>" class="btn btn-link text-decoration-none mt-3">
                             <i class="bi bi-arrow-left"></i> Batal dan Kembali
                         </a>
                     <?php endif; ?>
@@ -86,7 +86,7 @@
         const btnKirim = document.getElementById('btn-kirim');
 
         // Ambil nama user dari session PHP untuk di-watermark
-        const namaUser = "<?= session()->get('nama') ?? 'Mahasiswa' ?>";
+        const namaUser = <?= json_encode((string) (session()->get('nama') ?? 'Mahasiswa')) ?>;
 
         // 1. Fungsi menyalakan kamera HP (kamera belakang kalau ada)
         async function mulaiKamera() {

@@ -8,6 +8,10 @@ class Auth extends BaseController
 {
     public function index()
     {
+        if (session()->get('isLoggedIn')) {
+            return redirect()->to(session()->get('role') === 'guru' ? '/guru' : '/mahasiswa');
+        }
+
         return view('auth/login');
     }
 
@@ -70,20 +74,27 @@ class Auth extends BaseController
         $passwordBaru = $this->request->getPost('password_baru');
         $konfirmasiPassword = $this->request->getPost('konfirmasi_password');
 
-        // 1. Validasi konfirmasi password
+        // 1. Validasi konfirmasi password dan panjang karakter
+        if (strlen((string) $passwordBaru) < 6) {
+            return redirect()->back()->with('error', 'Password baru minimal 6 karakter!');
+        }
+
         if ($passwordBaru !== $konfirmasiPassword) {
             return redirect()->back()->with('error', 'Konfirmasi password tidak cocok dengan password baru!');
         }
 
         // 2. Ambil data session
         $idUser = session()->get('id_user');
-        $role   = session()->get('role'); // Masih butuh buat redirect nanti
+        $role   = session()->get('role');
 
-        // 3. Panggil UserModel (Sekarang cukup panggil satu model ini aja)
+        // 3. Panggil UserModel
         $userModel = new UserModel();
 
         // 4. Cari data user di database berdasarkan ID session
         $user = $userModel->find($idUser);
+        if (!$user) {
+            return redirect()->to('/auth')->with('error', 'User tidak ditemukan atau sesi telah berakhir.');
+        }
 
         // 5. Cek apakah password lama sesuai
         if (!password_verify($passwordLama, $user['password'])) {

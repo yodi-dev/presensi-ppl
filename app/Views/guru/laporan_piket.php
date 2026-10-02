@@ -99,29 +99,29 @@
                             <?php $no = 1;
                             foreach ($dataPiket as $row) : ?>
                                 <tr>
-                                    <td class="text-center"><?= $no++ ?></td>
-                                    <td><?= date('d M Y', strtotime($row['tanggal'])) ?></td>
-                                    <td><?= date('H:i', strtotime($row['waktu'])) ?> WIB</td>
-                                    <td class="fw-bold"><?= $row['nama'] ?></td>
+                                    <td class="text-center"><?= esc($no++) ?></td>
+                                    <td><?= esc(date('d M Y', strtotime($row['tanggal']))) ?></td>
+                                    <td><?= esc(date('H:i', strtotime($row['waktu']))) ?> WIB</td>
+                                    <td class="fw-bold"><?= esc($row['nama']) ?></td>
                                     <td>
-                                        <span class="badge bg-secondary"><?= $row['jurusan'] ?></span>
+                                        <span class="badge bg-secondary"><?= esc($row['jurusan']) ?></span>
                                     </td>
                                     <td class="text-center">
                                         <button type="button" class="btn btn-sm btn-info text-white"
                                             data-bs-toggle="modal"
-                                            data-bs-target="#modalFoto<?= $row['id'] ?>">
+                                            data-bs-target="#modalFoto<?= (int) $row['id'] ?>">
                                             <i class="bi bi-image"></i> Lihat Bukti
                                         </button>
 
-                                        <div class="modal fade" id="modalFoto<?= $row['id'] ?>" tabindex="-1" aria-hidden="true">
+                                        <div class="modal fade" id="modalFoto<?= (int) $row['id'] ?>" tabindex="-1" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered">
                                                 <div class="modal-content">
                                                     <div class="modal-header border-0">
-                                                        <h5 class="modal-title fs-6 text-start">Bukti Piket: <?= $row['nama'] ?></h5>
+                                                        <h5 class="modal-title fs-6 text-start">Bukti Piket: <?= esc($row['nama']) ?></h5>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body text-center p-0">
-                                                        <img src="<?= base_url('uploads/piket/' . $row['foto_bukti']) ?>"
+                                                        <img src="<?= base_url('uploads/piket/' . esc($row['foto_bukti'])) ?>"
                                                             alt="Bukti Piket" class="img-fluid w-100">
                                                     </div>
                                                     <div class="modal-footer border-0">

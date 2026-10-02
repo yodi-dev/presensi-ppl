@@ -204,8 +204,8 @@
                         <?php else: ?>
                             <?php foreach ($laporan as $key => $row): ?>
                                 <tr>
-                                    <td><span class="text-muted"><?= $key + 1 ?></span></td>
-                                    <td class="text-start fw-bold text-dark"><?= $row['nama'] ?></td>
+                                    <td><span class="text-muted"><?= esc($key + 1) ?></span></td>
+                                    <td class="text-start fw-bold text-dark"><?= esc($row['nama']) ?></td>
 
                                     <td class="fw-semibold text-success"><?= $row['total_hadir'] ?></td>
                                     <td class="fw-semibold text-info-emphasis"><?= $row['total_izin'] ?></td>

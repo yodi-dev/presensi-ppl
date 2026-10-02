@@ -35,7 +35,7 @@
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops!',
-                    text: '<?= session()->getFlashdata('error') ?>',
+                    text: <?= json_encode((string) session()->getFlashdata('error')) ?>,
                     confirmButtonColor: '#003366',
                     confirmButtonText: 'OK'
                 });
@@ -49,7 +49,7 @@
                 Swal.fire({
                     icon: 'success',
                     title: 'Berhasil!',
-                    text: '<?= session()->getFlashdata('pesan') ?>',
+                    text: <?= json_encode((string) session()->getFlashdata('pesan')) ?>,
                     confirmButtonColor: '#003366',
                     timer: 2500,
                     showConfirmButton: false
