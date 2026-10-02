@@ -96,8 +96,8 @@ Di bagian bawah seluruh halaman disematkan atribusi resmi:
 
 ### 1. Clone Repositori
 ```bash
-git clone https://github.com/yodi-dev/presensi-ppl.git
-cd presensi-ppl
+git clone https://github.com/yodi-dev/sipensi-skagata.git
+cd sipensi-skagata
 ```
 
 ### 2. Konfigurasi Environment
