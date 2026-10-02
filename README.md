@@ -1,65 +1,98 @@
-# Presensi PPL
+# SIPENSI SKAGATA
+### Sistem Informasi Presensi & Piket KBM &bull; SMK Negeri 3 Yogyakarta
 
-Sistem informasi presensi digital dan dokumentasi piket KBM (Kegiatan Belajar Mengajar) untuk mahasiswa Praktik Pengalaman Lapangan (PPL) berbasis web menggunakan CodeIgniter 4.
-
----
-
-## Tentang Aplikasi
-
-Aplikasi ini dikembangkan untuk memudahkan pemantauan kehadiran serta kegiatan mahasiswa PPL secara transparan dan akurat. Sistem ini memisahkan hak akses antara Guru Pamong/Pembimbing dan Mahasiswa PPL, dilengkapi pelacakan koordinat lokasi saat absen serta dokumentasi piket berbasis kamera langsung dengan watermark waktu.
-
----
-
-## Fitur Utama
-
-### Mahasiswa PPL
-* **Presensi Datang & Pulang**: Pencatatan waktu masuk dan keluar otomatis dilengkapi validasi koordinat GPS radius sekolah (Geofencing Formula Haversine) dan pencegahan absen pulang sebelum jam kerja selesai.
-* **Kebijakan Keterlambatan**: Deteksi otomatis status terlambat jika absensi melewati jam masuk maksimal (07:15 WIB).
-* **Pengajuan Izin & Sakit**: Formulir pengajuan izin/sakit dengan lampiran bukti surat/dokumen (opsional saat pengajuan awal dan dapat disusulkan kemudian).
-* **Riwayat Presensi Mandiri**: Monitoring rekapitulasi kehadiran per bulan, rincian status, dan fasilitas unggah bukti susulan.
-* **Presensi Piket KBM**: Dokumentasi kegiatan piket menggunakan kamera perangkat secara langsung, dilengkapi watermark waktu dan identitas mahasiswa pada foto bukti.
-* **Ganti Password**: Pengelolaan keamanan akun mandiri.
-
-### Guru Pamong / Pembimbing
-* **Dashboard Rekap Harian**: Pemantauan kehadiran seluruh mahasiswa per tanggal dengan filter jurusan (Informatika, PJOK, BK, TL, TO).
-* **Verifikasi Titik Lokasi**: Tautan langsung ke Google Maps berdasarkan koordinat GPS saat mahasiswa melakukan absensi datang.
-* **Pembaruan Status Presensi**: Fasilitas perubahan status kehadiran (Hadir, Terlambat, Izin, Sakit, Alpa) dan peninjauan bukti surat izin/sakit.
-* **Laporan Bulanan & Ekspor Excel**: Rekapitulasi akumulasi kehadiran bulanan per mahasiswa lengkap dengan persentase kehadiran, format cetak PDF, dan unduhan file Excel (.xls) native.
-* **Laporan Piket KBM**: Rekapitulasi dokumentasi kegiatan piket harian beserta penampil bukti foto.
-
-### Administrator (Superadmin)
-* **Manajemen Pengguna (CRUD)**: Pengelolaan akun pengguna (Mahasiswa, Guru, Admin), pembuatan akun baru dengan hashing bcrypt, edit data jurusan/role, dan penghapusan akun.
-* **Reset Password Pengguna**: Fasilitas reset sandi pengguna yang lupa password.
-* **Filter & Pencarian Pengguna**: Pencarian cepat berdasarkan nama/username serta penyaringan berbasis peran dan jurusan.
-
-### Keamanan Sistem
-* **Autentikasi & Otorisasi Rute**: Penggunaan `AuthFilter` dan `RoleFilter` berbasis middleware untuk membatasi akses URL berdasarkan peran (Admin, Guru, Mahasiswa).
-* **Validasi GPS Geofencing**: Penolakan presensi di luar radius sekolah yang telah ditentukan (konfigurasi di `app/Config/Presensi.php`).
-* **Proteksi File Upload**: Validasi MIME type, verifikasi binary gambar, whitelist ekstensi, dan pembatasan eksekusi skrip PHP di folder upload via `.htaccess`.
-* **Proteksi SQL Injection & XSS**: Penggunaan parameterized query/escaping pada seluruh filter dan sanitasi output tampilan menggunakan `esc()`.
-* **Proteksi CSRF**: Penerapan token CSRF pada seluruh permintaan POST state-changing.
+[![CI/Automated Tests](https://img.shields.io/badge/Tests-44%20Passed-success?style=flat-square&logo=php)](tests/runner.php)
+[![PHP Version](https://img.shields.io/badge/PHP-8.2%2B-blue?style=flat-square&logo=php)](https://www.php.net/)
+[![Framework](https://img.shields.io/badge/Framework-CodeIgniter%204-firebrick?style=flat-square&logo=codeigniter)](https://codeigniter.com/)
+[![Design System](https://img.shields.io/badge/Theme-Skagata%20Emerald-0f5132?style=flat-square)](PRD.md)
+[![Sister App](https://img.shields.io/badge/Ecosystem-SIBENKA%20SKAGATA-10b981?style=flat-square)](https://github.com/yodi-dev)
 
 ---
 
-## Teknologi yang Digunakan
+## 📌 Tentang Aplikasi
 
-* **Backend**: PHP 8.2+ / CodeIgniter 4
-* **Database**: MySQL
-* **Frontend**: Bootstrap 5.3, Bootstrap Icons, SweetAlert2
-* **Web API Browser**: HTML5 Geolocation API, HTML5 Canvas API, MediaDevices Camera API
+**SIPENSI SKAGATA** *(Sistem Informasi Presensi & Piket Skagata)* adalah platform web presensi digital dan dokumentasi piket KBM (*Kegiatan Belajar Mengajar*) yang dirancang khusus untuk ekosistem **SMK Negeri 3 Yogyakarta (Skagata)**.
 
----
+Aplikasi ini merupakan bagian dari ekosistem digital Skagata, bersanding bersama aplikasi saudara **SIBENKA SKAGATA** *(Sirkulasi Bengkel Skagata)*. Sistem ini melayani pencatatan kehadiran presisi untuk:
+1. **Mahasiswa Praktikan (PK & PPG)** dari berbagai perguruan tinggi mitra (UNY, UAD, UST, dsb.) lintas jurusan.
+2. **Guru Tidak Tetap (GTT)** di lingkungan SMKN 3 Yogyakarta.
+3. **Guru Pamong / Pembimbing** untuk supervisi, monitoring, dan pengesahan kehadiran bulanan.
+4. **Administrator (Superadmin)** untuk kalibrasi geofencing, jam dinas operasional, dan manajemen pengguna.
 
-## Persyaratan Sistem
-
-* PHP versi 8.2 atau lebih tinggi
-* Ekstensi PHP: `intl`, `mbstring`, `json`, `mysqli`, `fileinfo`
-* Web Server (Apache via Laragon / XAMPP)
-* MySQL Database Server
+> 📖 **Spesifikasi Produk Lengkap**: Silakan baca dokumen resmi di [**PRD.md (Product Requirements Document v2.0)**](PRD.md).
 
 ---
 
-## Panduan Instalasi Lokal
+## 🌟 Fitur Utama Sistem
+
+### 📱 1. Mahasiswa Praktikan & Guru Tidak Tetap (Mobile-First)
+* **Presensi Datang & Pulang Real-Time**: Pencatatan kehadiran akurat dengan penegakan radius GPS Geofencing (Formula Haversine) di area SMKN 3 Yogyakarta.
+* **Banner Jam Kerja Dinamis**: Informasi batas jam masuk normal dan jam pulang minimal tampil elegan di layar utama ponsel.
+* **Deteksi Keterlambatan Otomatis**: Deteksi status `terlambat` jika absen datang melewati batas toleransi masuk sekolah (default: `07:15 WIB`).
+* **Pencegahan Checkout Dini**: Tombol pulang terkunci hingga jam dinas pulang tercapai (default: `15:00 WIB`).
+* **Pengajuan Izin & Sakit**: Formulir izin/sakit dengan berkas bukti surat opsional yang dapat dilengkapi susulan kapan saja.
+* **Riwayat Mandiri dengan Auto-Filter**: Rekapitulasi kehadiran bulanan dengan dropdown interaktif yang otomatis berganti tanpa tombol submit manual (pola interaksi konsisten dengan *SIBENKA*).
+* **Dokumentasi Piket KBM**:
+  - **Flip Kamera**: Pemilihan fleksibel antara kamera depan (`user`) dan kamera belakang (`environment`).
+  - **Kompresi Gambar Sisi Klien**: Kompresi otomatis via HTML5 Canvas (resolusi maksimum 1280px, kualitas JPEG 75%) untuk menghemat kuota dan memori server.
+  - **Watermark Kedinasan**: Stempel waktu otomatis, nama pengguna, dan identitas resmi SMKN 3 Yogyakarta.
+
+### 👨‍🏫 2. Guru Pamong / Pembimbing
+* **Monitoring Harian**: Verifikasi presensi harian per jurusan mahasiswa dengan filter reaktif instan.
+* **Inspeksi Lokasi GPS**: Tautan langsung koordinat GPS presensi datang ke Google Maps.
+* **Pembaruan Status Presensi**: Otoritas mengubah status (Hadir, Terlambat, Izin, Sakit, Alpa) dan meninjau berkas surat perizinan.
+* **Laporan Bulanan Berkop Dinas Skagata**: Format laporan kedinasan cetak fisik / PDF dilengkapi **Kop Resmi SMK Negeri 3 Yogyakarta** dan lembar pengesahan tanda tangan ganda.
+* **Unduhan Excel Native**: Ekspor rekapitulasi kehadiran bulanan dalam format `.xls` bersih dengan perhitungan persentase kehadiran efektif.
+* **Laporan Piket KBM**: Rekapitulasi foto kegiatan piket harian beserta modal penampil foto beresolusi optimal.
+
+### ⚙️ 3. Administrator (Superadmin)
+* **Manajemen Pengguna (CRUD)**: Kelola akun Guru Pamong, GTT, dan Mahasiswa praktikan lengkap dengan atribut jurusan dan status keaktifan.
+* **Auto-Filter Pengguna**: Pencarian nama/username dan penyaringan role/jurusan otomatis (*reactive on-change*).
+* **Peta Geofencing Interaktif (Leaflet.js)**:
+  - Titik pusat sekolah visual dengan *draggable marker* di Jl. R.W. Monginsidi No. 2, Jetis, Yogyakarta (`-7.780120`, `110.366450`).
+  - Slider kalibrasi radius perimeter visual (10m s.d. 1000m) dengan lingkaran *Skagata Emerald*.
+  - Tombol deteksi lokasi GPS perangkat admin secara langsung.
+  - Toggle toleransi darurat (on/off geofence) jika terjadi gangguan sinyal GPS massal.
+* **Pengaturan Jam Kerja Sekolah**: Konfigurasi dinamis jam masuk maksimal dan jam pulang minimal yang langsung tersinkronisasi ke seluruh sistem.
+* **Reset Password & Profil Terpisah**: Fasilitas reset password bagi akun pengguna serta pengelolaan kredensial superadmin mandiri.
+
+### 🛡️ 4. Keamanan Sistem & Audit Perlindungan
+* **Role-Based Access Control (RBAC)**: Proteksi rute berbasis middleware [`AuthFilter`](app/Filters/AuthFilter.php) dan [`RoleFilter`](app/Filters/RoleFilter.php).
+* **Proteksi File Upload Ketat**: Validasi MIME type, verifikasi keaslian binary gambar melalui `getimagesizefromstring()`, hashing nama file unik, dan blokir eksekusi skrip PHP di folder upload via `.htaccess`.
+* **Anti SQL Injection & XSS**: Parameterized query / escaping di seluruh query builder dan sanitasi output HTML menggunakan `esc()`.
+* **Proteksi CSRF**: Perlindungan CSRF token pada seluruh manipulasi data (POST / DELETE).
+
+---
+
+## 🎨 Desain Sistem: Skagata Emerald
+
+Antarmuka SIPENSI SKAGATA dirancang dengan filosofi **elegan, minimalis, dan terukur**:
+
+| Token Warna | Nilai Hex | Penggunaan |
+| :--- | :---: | :--- |
+| **Skagata Emerald** | `#0f5132` | Header navbar, tombol aksi primer, kartu sorotan |
+| **Deep Forest** | `#0a3622` | Header tabel kedinasan, hover state tombol utama |
+| **Vibrant Mint** | `#10b981` | Indikator Hadir, lingkaran aktif geofencing |
+| **Amber Gold** | `#d97706` | Indikator Terlambat, aksen peringatan |
+| **Slate Surface** | `#f8fafc` | Latar belakang lembut seluruh halaman |
+| **Slate Text** | `#0f172a` | Tipografi judul dan teks utama |
+
+Di bagian bawah seluruh halaman disematkan atribusi resmi:
+> *Crafted with ❤️ by [awanbeo.my.id](https://awanbeo.my.id) &bull; SMK Negeri 3 Yogyakarta*
+
+---
+
+## 💻 Persyaratan Sistem
+
+* **PHP**: Versi `8.2` atau lebih tinggi
+* **Ekstensi PHP**: `intl`, `mbstring`, `json`, `mysqli`, `fileinfo`, `gd`
+* **Web Server**: Apache (Laragon / XAMPP)
+* **Database**: MySQL 5.7+ / MariaDB 10.4+
+* **Browser**: Chrome, Firefox, Safari, atau Edge modern (dengan izin akses Kamera & Lokasi GPS)
+
+---
+
+## 🚀 Panduan Instalasi Lokal
 
 ### 1. Clone Repositori
 ```bash
@@ -68,8 +101,9 @@ cd presensi-ppl
 ```
 
 ### 2. Konfigurasi Environment
-Salin file konfigurasi contoh `.env.example` menjadi `.env`:
+Salin file konfigurasi `.env.example` menjadi `.env`:
 ```bash
+# Windows Command Prompt / PowerShell:
 copy .env.example .env
 ```
 Sesuaikan pengaturan database dan URL dasar aplikasi pada file `.env`:
@@ -85,85 +119,88 @@ database.default.password =
 database.default.DBDriver = MySQLi
 ```
 
-### 3. Setup Database
-1. Buat database baru di MySQL dengan nama `db_presensi`.
-2. Pastikan tabel `users`, `presensi`, `piket_kbm`, dan `settings` telah tersedia.
-3. Jalankan DatabaseSeeder untuk mengisi data awal administrator, guru, mahasiswa, dan pengaturan sekolah:
+### 3. Setup Database & Seeder
+Buat database baru di MySQL dengan nama `db_presensi`, lalu jalankan database seeder untuk menginisialisasi tabel dan data pengujian Skagata:
 ```bash
 php spark db:seed DatabaseSeeder
 ```
 
-### 4. Menjalankan Aplikasi
-Jalankan server pengembangan bawaan CodeIgniter:
+### 4. Menjalankan Server Lokal
 ```bash
 php spark serve
 ```
-Buka browser dan akses alamat: `http://localhost:8080` (atau via virtual host Laragon).
+Akses aplikasi melalui peramban: `http://localhost:8080` (atau via virtual host Laragon: `http://presensi-ppl.test`).
 
 ---
 
-## Akun Default Pengujian
+## 🔑 Kredensial Akun Pengujian / Demo
 
-| Peran | Username | Password Default | Keterangan |
+| Peran | Username | Password | Keterangan |
 | :--- | :--- | :--- | :--- |
-| **Admin** | `admin` | `admin123` | Administrator Sistem |
-| **Guru** | `febriyana` | `secret` | Akun Pembimbing |
-| **Guru** | `jumari` | `secret` | Akun Pembimbing |
-| **Mahasiswa** | `awan` | `secret` | Mahasiswa Informatika |
-| **Mahasiswa** | `fajar` | `secret` | Mahasiswa Informatika |
-| **Mahasiswa** | `latifah` | `secret` | Mahasiswa BK |
+| **Administrator** | `admin` | `admin123` | Superadmin Sistem Skagata |
+| **Guru Pamong** | `febriyana` | `secret` | Pembimbing Jurusan Informatika |
+| **Guru Pamong** | `jumari` | `secret` | Pembimbing Jurusan Kejuruan |
+| **Mahasiswa Praktikan** | `awan` | `secret` | Praktikan Pend. Teknik Informatika |
+| **Mahasiswa Praktikan** | `fajar` | `secret` | Praktikan Pend. Teknik Informatika |
+| **Mahasiswa Praktikan** | `latifah` | `secret` | Praktikan Bimbingan Konseling (BK) |
+| **Mahasiswa Praktikan** | `dewi` | `secret` | Praktikan Pend. Jasmani (PJOK) |
+| **Mahasiswa Praktikan** | `budi` | `secret` | Praktikan Pend. Teknik Elektro (TL) |
 
 ---
 
-## Pengujian Otomatis
+## 🧪 Pengujian Otomatis (Automated Test Suite)
 
-Aplikasi dilengkapi dengan test suite mandiri untuk memverifikasi keamanan dan fungsionalitas sistem.
+SIPENSI SKAGATA dilengkapi dengan test runner otomatis mandiri yang menguji 44 skenario keamanan dan fungsionalitas:
 
-Jalankan pengujian melalui terminal:
 ```bash
 php tests/runner.php
 ```
 
-Pengujian (41 skenario pengujian) mencakup:
-1. Verifikasi penolakan akses tamu pada rute terproteksi (`AuthFilter`).
-2. Verifikasi pemisahan hak akses Guru, Mahasiswa, dan Admin (`RoleFilter`).
-3. Pengujian keamanan upload bukti piket (validasi binary, ekstensi, dan `.htaccess`).
-4. Pengujian netralisasi injeksi SQL pada parameter tanggal dan bulan/tahun.
-5. Pengujian sanitasi output terhadap potensi XSS.
-6. Verifikasi ketiadaan kredensial sensitif pada repositori.
-7. Pengujian validasi GPS Geofencing (Formula Haversine & radius perimeter sekolah).
-8. Pengujian kebijakan jam kerja & deteksi status keterlambatan serta pembatasan checkout dini.
-9. Pengujian hak akses Admin dan pencegahan self-delete akun admin.
-10. Pengujian format unduhan Excel (.xls) dan whitelist status presensi.
-11. Pengujian pengaturan geofencing dinamis, toleransi bypass, dan SettingModel.
+### Lingkup Pengujian (44 Skenario - 100% PASS):
+1. **Proteksi Tamu (`AuthFilter`)**: Penolakan akses tamu tanpa sesi login.
+2. **Pemisahan Peran (`RoleFilter`)**: Verifikasi batas kewenangan Mahasiswa, Guru, dan Admin.
+3. **Keamanan File Upload**: Validasi format binary gambar palsu, pemblokiran ekstensi ganda, dan file `.htaccess`.
+4. **Penanggulangan SQL Injection**: Sanitasi parameter filter tanggal dan integer casting bulan/tahun.
+5. **Sanitasi XSS**: Uji netralisasi tag script dan atribut manipulasi HTML.
+6. **Kebersihan Kredensial**: Pemeriksaan file `.gitignore` dan `.env.example`.
+7. **Geofencing Haversine**: Verifikasi presisi radius GPS dan penolakan presensi di luar perimeter.
+8. **Ketentuan Jam Kerja**: Validasi deteksi status terlambat dan pencegahan checkout dini.
+9. **Manajemen Pengguna Admin**: Hak akses admin dan larangan self-delete akun admin.
+10. **Laporan & Status Whitelist**: Integritas status kehadiran dan ekspor spreadsheet.
+11. **Modul Pengaturan Dinamis**: Validasi model konfigurasi dan toggle toleransi darurat.
+12. **Hari Kerja Efektif & Skagata Branding**: Pengecualian hari libur akhir pekan (Sabtu-Minggu) dan integritas identitas institusi SMKN 3 Yogyakarta.
 
 ---
 
-## Struktur Direktori Utama
+## 📁 Struktur Direktori Proyek
 
 ```
 presensi-ppl/
 ├── app/
-│   ├── Config/          # Konfigurasi aplikasi, presensi GPS, filter, routing
-│   ├── Controllers/     # Controller Auth, Admin, Guru, dan Mahasiswa
-│   ├── Database/        # Seeder dan migrasi database
-│   ├── Filters/         # Filter middleware AuthFilter & RoleFilter
-│   ├── Models/          # Model data UserModel, PresensiModel, PiketModel
-│   └── Views/           # Template antarmuka (admin, auth, guru, mahasiswa, layout)
+│   ├── Config/          # Konfigurasi aplikasi, presensi GPS, routes, dan filter
+│   ├── Controllers/     # Controller Admin, Auth, Guru, dan Mahasiswa
+│   ├── Database/        # Seeder data pengguna, pengaturan, dan presensi
+│   ├── Filters/         # Middleware AuthFilter dan RoleFilter
+│   ├── Models/          # Model UserModel, PresensiModel, PiketModel, SettingModel
+│   └── Views/           # Antarmuka tampilan (layout, admin, auth, guru, mahasiswa)
 ├── public/
-│   ├── uploads/         # Direktori upload foto bukti (dilindungi .htaccess)
-│   ├── favicon.png      # Ikon favicon web
+│   ├── uploads/         # Direktori berkas surat & foto piket (dilindungi .htaccess)
+│   ├── favicon.png      # Favicon web
 │   └── index.php        # Front controller aplikasi
 ├── tests/
-│   ├── runner.php       # Test runner otomatis mandiri (34 tests)
-│   └── unit/            # Unit testing standar
+│   └── runner.php       # Test runner mandiri CodeIgniter 4 (44 tests)
 ├── .env.example         # Template konfigurasi environment bersih
 ├── .gitignore           # Konfigurasi pengabaian file sensitif
-└── README.md            # Dokumentasi proyek
+├── PRD.md               # Product Requirements Document (PRD) v2.0 Resmi
+└── README.md            # Dokumentasi proyek utama
 ```
 
 ---
 
-## Lisensi
+## 📄 Kredit & Lisensi
 
-Proyek ini dikembangkan untuk kebutuhan internal institusi dan praktik mahasiswa PPL.
+Dikembangkan dengan dedikasi untuk menunjang kegiatan operasional dan Praktik Pengalaman Lapangan di lingkungan **SMK Negeri 3 Yogyakarta**.
+
+* **Institusi Tuan Rumah**: SMK Negeri 3 Yogyakarta
+* **Lead Developer**: Yodi Irawan
+* **Kredit Resmi**: *Crafted with ❤️ by [awanbeo.my.id](https://awanbeo.my.id)*
