@@ -255,27 +255,6 @@
                 </div>
             </div>
 
-            <!-- Kartu Akses Akun Tambahan Bawah -->
-            <div class="card bg-white border rounded-4 p-3 mb-2 shadow-sm">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="d-flex align-items-center gap-2 text-start">
-                        <i class="bi bi-person-circle fs-3 text-secondary"></i>
-                        <div>
-                            <div class="fw-bold text-dark small lh-1"><?= esc(session()->get('nama')) ?></div>
-                            <span class="badge bg-light text-muted border mt-1" style="font-size: 0.7rem;">Mahasiswa Praktikan</span>
-                        </div>
-                    </div>
-                    <div class="d-flex gap-2">
-                        <a href="<?= base_url('ubah_password') ?>" class="btn btn-sm btn-outline-secondary rounded-pill px-3" title="Ubah Password">
-                            <i class="bi bi-key me-1"></i> Password
-                        </a>
-                        <a href="<?= base_url('auth/logout') ?>" class="btn btn-sm btn-danger rounded-pill px-3" title="Keluar">
-                            <i class="bi bi-box-arrow-right me-1"></i> Logout
-                        </a>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </div>
 </div>

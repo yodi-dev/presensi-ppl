@@ -90,10 +90,13 @@
             <div class="col-11 col-sm-8 col-md-6 col-lg-5 col-xl-4">
 
                 <div class="card login-card border-0">
-                    <div class="login-header">
-                        <i class="bi bi-geo-alt-fill fs-1 mb-2 text-warning d-block"></i>
-                        <h4 class="fw-bold mb-0" style="letter-spacing: 0.5px;">SIPENSI SKAGATA</h4>
-                        <p class="text-white-50 mb-0 small mt-1">SMK Negeri 3 Yogyakarta</p>
+                    <div class="login-header text-center">
+                        <div class="mb-2">
+                            <img src="<?= base_url('logo-skagata.png') ?>" alt="Logo SMK Negeri 3 Yogyakarta" style="width: 76px; height: 76px; object-fit: contain; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));">
+                        </div>
+                        <span class="text-white-50 text-uppercase fw-medium d-block mb-1" style="letter-spacing: 1.5px; font-size: 0.75rem;">Selamat Datang di</span>
+                        <h4 class="fw-bold mb-0 text-white" style="letter-spacing: 0.5px;">SIPENSI SKAGATA</h4>
+                        <p class="text-white-50 mb-0 small mt-1" style="font-size: 0.8rem;">Sistem Informasi Presensi &amp; Piket KBM</p>
                     </div>
 
                     <div class="login-body">
