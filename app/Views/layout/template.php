@@ -216,7 +216,12 @@
 
     <footer class="footer-skagata py-3 text-center">
         <div class="container">
-            <span>Crafted with ❤️ by <a href="https://awanbeo.my.id" target="_blank" class="fw-semibold text-success text-decoration-none">awanbeo.my.id</a> &bull; SMK Negeri 3 Yogyakarta</span>
+            <div class="small text-muted">
+                Crafted with <span class="text-danger">❤️</span> by <a href="https://awanbeo.my.id" target="_blank" class="fw-semibold text-success text-decoration-none">awanbeo.my.id</a>
+            </div>
+            <div class="small text-muted mt-1 fw-medium" style="font-size: 0.8rem;">
+                SMK Negeri 3 Yogyakarta
+            </div>
         </div>
     </footer>
 

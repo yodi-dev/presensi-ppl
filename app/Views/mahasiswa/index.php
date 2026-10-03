@@ -18,43 +18,63 @@
     }
 
     .btn-absen {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
+        width: 125px;
+        height: 125px;
+        border-radius: 50% !important;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        font-size: 1.1rem;
+        font-size: 1.05rem;
         font-weight: 700;
-        transition: all 0.25s ease;
-        border: 4px solid transparent;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        border: none !important;
+        outline: none !important;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+        position: relative;
     }
 
-    .btn-absen:hover:not(:disabled) {
-        transform: scale(1.05);
+    .btn-absen:focus,
+    .btn-absen:active {
+        outline: none !important;
+        box-shadow: none !important;
     }
 
     .btn-datang {
-        background: linear-gradient(135deg, #0f5132, #10b981);
-        color: #ffffff;
-        box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+        background: linear-gradient(135deg, #0f5132 0%, #10b981 100%) !important;
+        color: #ffffff !important;
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35) !important;
+    }
+
+    .btn-datang:hover:not(:disabled) {
+        transform: translateY(-2px) scale(1.04);
+        box-shadow: 0 10px 25px rgba(16, 185, 129, 0.45) !important;
+        color: #ffffff !important;
     }
 
     .btn-pulang {
-        background: linear-gradient(135deg, #d97706, #f59e0b);
-        color: #ffffff;
-        box-shadow: 0 8px 24px rgba(217, 119, 6, 0.25);
+        background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%) !important;
+        color: #ffffff !important;
+        box-shadow: 0 6px 20px rgba(217, 119, 6, 0.3) !important;
+    }
+
+    .btn-pulang:hover:not(:disabled) {
+        transform: translateY(-2px) scale(1.04);
+        box-shadow: 0 10px 25px rgba(217, 119, 6, 0.4) !important;
+        color: #ffffff !important;
     }
 
     .btn-absen:disabled {
-        background: #f1f5f9;
-        color: #94a3b8;
-        box-shadow: none;
+        background: #e2e8f0 !important;
+        color: #94a3b8 !important;
+        box-shadow: none !important;
         cursor: not-allowed;
-        border-color: #e2e8f0;
+        transform: none !important;
+        opacity: 0.65;
+        border: none !important;
     }
 
     .operational-pill {
@@ -80,10 +100,22 @@
     <div class="row justify-content-center">
         <div class="col-12 col-md-8 col-lg-6 col-xl-5">
 
-            <!-- Sambutan & Identitas Singkat -->
-            <div class="mb-3 text-start">
-                <span class="text-muted small">Selamat datang,</span>
-                <h4 class="fw-bold text-dark mb-0"><?= esc(session()->get('nama')) ?></h4>
+            <!-- Sambutan & Tombol Akun Cepat (Ubah Password & Logout) -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="text-start">
+                    <span class="text-muted small">Selamat datang,</span>
+                    <h5 class="fw-bold text-dark mb-0 text-truncate" style="max-width: 190px;" title="<?= esc(session()->get('nama')) ?>">
+                        <?= esc(session()->get('nama')) ?>
+                    </h5>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="<?= base_url('ubah_password') ?>" class="btn btn-outline-secondary btn-sm rounded-pill px-3 shadow-sm d-flex align-items-center gap-1" title="Ubah Password">
+                        <i class="bi bi-key"></i> <span class="small">Password</span>
+                    </a>
+                    <a href="<?= base_url('auth/logout') ?>" class="btn btn-outline-danger btn-sm rounded-pill px-3 shadow-sm d-flex align-items-center gap-1" title="Keluar">
+                        <i class="bi bi-box-arrow-right"></i> <span class="small">Logout</span>
+                    </a>
+                </div>
             </div>
 
             <!-- Banner Jam Operasional Resmi Skagata -->
@@ -198,7 +230,7 @@
             </div>
 
             <!-- Tautan Cepat Navigasi Tambahan Bawah (Ergonomis Ponsel) -->
-            <div class="row g-2">
+            <div class="row g-2 mb-3">
                 <div class="col-6">
                     <a href="<?= base_url('mahasiswa/piket') ?>" class="btn btn-light border w-100 text-start p-3 rounded-4 shadow-sm text-decoration-none">
                         <div class="d-flex align-items-center gap-2">
@@ -220,6 +252,27 @@
                             </div>
                         </div>
                     </a>
+                </div>
+            </div>
+
+            <!-- Kartu Akses Akun Tambahan Bawah -->
+            <div class="card bg-white border rounded-4 p-3 mb-2 shadow-sm">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center gap-2 text-start">
+                        <i class="bi bi-person-circle fs-3 text-secondary"></i>
+                        <div>
+                            <div class="fw-bold text-dark small lh-1"><?= esc(session()->get('nama')) ?></div>
+                            <span class="badge bg-light text-muted border mt-1" style="font-size: 0.7rem;">Mahasiswa Praktikan</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="<?= base_url('ubah_password') ?>" class="btn btn-sm btn-outline-secondary rounded-pill px-3" title="Ubah Password">
+                            <i class="bi bi-key me-1"></i> Password
+                        </a>
+                        <a href="<?= base_url('auth/logout') ?>" class="btn btn-sm btn-danger rounded-pill px-3" title="Keluar">
+                            <i class="bi bi-box-arrow-right me-1"></i> Logout
+                        </a>
+                    </div>
                 </div>
             </div>
 
